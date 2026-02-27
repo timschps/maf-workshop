@@ -168,4 +168,4 @@ Add a third specialist: a "SalesAgent" for product inquiries and pricing questio
 
 ## What's Next?
 
-In **Lab 19**, you'll build **concurrent workflows** where multiple agents process data simultaneously in parallel.
+In **Lab 19**, you'll build a **group chat** where multiple agents collaborate in a shared conversation with iterative refinement.

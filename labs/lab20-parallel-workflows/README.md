@@ -1,4 +1,4 @@
-# Lab 19: Concurrent Workflows — Parallel Agent Execution
+# Lab 20: Concurrent Workflows — Parallel Agent Execution
 
 ## Objective
 
@@ -184,4 +184,4 @@ Add a fourth researcher (e.g., "BudgetExpert") and update the merge function to 
 
 ## What's Next?
 
-In **Lab 20**, you'll combine everything — hosting multiple agents as a workflow, exposed via A2A protocol, creating a fully **hosted multi-agent system**.
+In **Lab 21**, you'll combine everything — hosting multiple agents as a workflow, exposed via A2A protocol, creating a fully **hosted multi-agent system**.

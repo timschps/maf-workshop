@@ -23,7 +23,7 @@
 | 14:00 – 16:30 | Hackathon: Add Agentic Experience to Partner App| Hack        |
 | 16:30 – 17:00 | Show & Tell + Wrap-up                          | Presentation|
 
-## Lab Overview (20 Labs)
+## Lab Overview (21 Labs)
 
 | #  | Lab                              | Duration | Module | Difficulty |
 |----|----------------------------------|----------|--------|------------|
@@ -45,10 +45,11 @@
 | 16 | Agent as MCP Server              | 15 min   | 5      | ⭐⭐⭐     |
 | 17 | A2A Client — Calling Remote Agents | 20 min | 5      | ⭐⭐⭐⭐   |
 | 18 | Handoff Workflows                | 25 min   | 5      | ⭐⭐⭐⭐   |
-| 19 | Concurrent Workflows             | 25 min   | 5      | ⭐⭐⭐⭐   |
-| 20 | Hosted Multi-Agent Workflow      | 25 min   | 5      | ⭐⭐⭐⭐⭐ |
+| 19 | Group Chat Workflows             | 25 min   | 5      | ⭐⭐⭐⭐   |
+| 20 | Concurrent Workflows             | 25 min   | 5      | ⭐⭐⭐⭐   |
+| 21 | Hosted Multi-Agent Workflow      | 25 min   | 5      | ⭐⭐⭐⭐⭐ |
 
-> **Note:** Not all labs need to be completed before the hackathon. Labs 1–9 cover core concepts; Labs 10–14 are advanced topics; Labs 15–20 are expert-level MCP, A2A, and multi-agent patterns for fast-paced participants.
+> **Note:** Not all labs need to be completed before the hackathon. Labs 1–9 cover core concepts; Labs 10–14 are advanced topics; Labs 15–21 are expert-level MCP, A2A, and multi-agent patterns for fast-paced participants.
 
 ---
 
@@ -263,9 +264,11 @@
 
 #### 🔬 Lab 18: Handoff Workflows (25 min) → [labs/lab18-conditional-workflows](./labs/lab18-conditional-workflows/)
 
-#### 🔬 Lab 19: Concurrent Workflows (25 min) → [labs/lab19-parallel-workflows](./labs/lab19-parallel-workflows/)
+#### 🔬 Lab 19: Group Chat Workflows (25 min) → [labs/lab19-group-chat](./labs/lab19-group-chat/)
 
-#### 🔬 Lab 20: Hosted Multi-Agent Workflow (25 min) → [labs/lab20-hosted-multi-agent](./labs/lab20-hosted-multi-agent/)
+#### 🔬 Lab 20: Concurrent Workflows (25 min) → [labs/lab20-parallel-workflows](./labs/lab20-parallel-workflows/)
+
+#### 🔬 Lab 21: Hosted Multi-Agent Workflow (25 min) → [labs/lab21-hosted-multi-agent](./labs/lab21-hosted-multi-agent/)
 
 > **Note:** Labs 15–20 are expert-level and designed for participants who finish the core labs ahead of schedule. They cover the most advanced MAF patterns and are excellent preparation for the hackathon.
 
@@ -378,6 +381,7 @@
 | Agent-as-Tool | Nest one agent inside another as a callable function |
 | Handoff Workflows | Triage agent routes to specialist agents based on query type |
 | Concurrent Workflows | Multiple agents process in parallel with result merging |
+| Group Chat | Agents collaborate in a shared conversation with iterative refinement |
 | AG-UI | Protocol for rich agent ↔ UI communication |
 | A2A Server | Expose agents via the Agent-to-Agent protocol (HTTP) |
 | `A2AAgent` | Client proxy to call remote agents over A2A protocol |

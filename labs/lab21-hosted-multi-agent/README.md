@@ -1,4 +1,4 @@
-# Lab 20: Hosted Multi-Agent Workflow
+# Lab 21: Hosted Multi-Agent Workflow
 
 ## Objective
 
@@ -209,7 +209,7 @@ This lab combines concepts from throughout the workshop:
 
 ## Congratulations! 🎉
 
-You've completed all 20 labs! You now have hands-on experience with:
+You've completed all 21 labs! You now have hands-on experience with:
 
 - ✅ Agent fundamentals & prompt engineering
 - ✅ Function tools & structured output
@@ -217,10 +217,10 @@ You've completed all 20 labs! You now have hands-on experience with:
 - ✅ Middleware & human-in-the-loop
 - ✅ Multi-agent composition (agent-as-tool)
 - ✅ Handoff routing in workflows
+- ✅ Group chat collaboration patterns
 - ✅ Concurrent & parallel workflows
 - ✅ MCP tools (consuming & exposing)
 - ✅ A2A protocol (server & client)
-- ✅ Conditional routing in workflows
 - ✅ Hosted multi-agent systems
 
 **Ready for the hackathon!** 🚀
