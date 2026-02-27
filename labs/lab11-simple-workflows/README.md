@@ -26,6 +26,7 @@ cd Lab4_Workflows
 dotnet add package Azure.AI.OpenAI --prerelease
 dotnet add package Azure.Identity
 dotnet add package Microsoft.Agents.AI.OpenAI --prerelease
+dotnet add package Microsoft.Agents.AI.Workflows --prerelease
 ```
 
 ### Step 2: Build a Two-Step Function Workflow
@@ -34,45 +35,39 @@ Replace `Program.cs`:
 
 ```csharp
 using System;
-using System.Linq;
 using System.Threading.Tasks;
+using Azure.AI.OpenAI;
+using Azure.Identity;
+using Microsoft.Agents.AI;
 using Microsoft.Agents.AI.Workflows;
+using Microsoft.Extensions.AI;
 
-// ── Step 1: Convert text to uppercase ────────────────────────────────────────
-class UpperCase : Executor
-{
-    [Handler]
-    public async Task ToUpperCase(string text, WorkflowContext<string> ctx)
-    {
-        Console.WriteLine($"  [UpperCase] Input:  '{text}'");
-        var result = text.ToUpper();
-        Console.WriteLine($"  [UpperCase] Output: '{result}'");
-        await ctx.SendMessageAsync(result);
-    }
-}
+var endpoint = Environment.GetEnvironmentVariable("AZURE_OPENAI_ENDPOINT")
+    ?? throw new InvalidOperationException("Set AZURE_OPENAI_ENDPOINT");
+var deploymentName = Environment.GetEnvironmentVariable("AZURE_OPENAI_DEPLOYMENT_NAME") ?? "gpt-4o-mini";
+var chatClient = new AzureOpenAIClient(new Uri(endpoint), new AzureCliCredential())
+    .GetChatClient(deploymentName);
 
-// ── Step 2: Reverse the string and yield as workflow output ──────────────────
-[Executor(Id = "reverse_text")]
-static async Task ReverseText(string text, WorkflowContext<Never, string> ctx)
-{
-    Console.WriteLine($"  [Reverse]   Input:  '{text}'");
-    var reversed = new string(text.Reverse().ToArray());
-    Console.WriteLine($"  [Reverse]   Output: '{reversed}'");
-    await ctx.YieldOutputAsync(reversed);
-}
+// ── Step 1: Agent to convert text to uppercase ──────────────────────────────
+AIAgent uppercaseAgent = chatClient.AsAIAgent(
+    instructions: "Convert the user's input text to UPPERCASE. Output only the uppercase text, nothing else.",
+    name: "UpperCaseAgent");
+
+// ── Step 2: Agent to reverse the string ─────────────────────────────────────
+AIAgent reverseAgent = chatClient.AsAIAgent(
+    instructions: "Reverse the user's input text character by character. Output only the reversed text, nothing else.",
+    name: "ReverseAgent");
 
 // ── Build and run the workflow ───────────────────────────────────────────────
-var upper = new UpperCase();
-var workflow = new AgentWorkflowBuilder(startExecutor: upper)
-    .AddEdge(upper, ReverseText)
-    .Build();
+var workflow = AgentWorkflowBuilder.BuildSequential([uppercaseAgent, reverseAgent]);
 
 Console.WriteLine("=== Running Workflow: UpperCase → Reverse ===");
 Console.WriteLine();
-var result = await workflow.RunAsync("hello world");
+var result = await InProcessExecution.Default.RunAsync(workflow, "hello world");
 Console.WriteLine();
-Console.WriteLine($"Final output: {string.Join(", ", result.GetOutputs())}");
+Console.WriteLine($"Final output: {result}");
 // Expected: DLROW OLLEH
+
 ```
 
 ### Step 3: Run It
@@ -81,7 +76,7 @@ Console.WriteLine($"Final output: {string.Join(", ", result.GetOutputs())}");
 dotnet run
 ```
 
-**Observe:** Data flows through the graph: `"hello world"` → `UpperCase` → `"HELLO WORLD"` → `Reverse` → `"DLROW OLLEH"`.
+**Observe:** Data flows through the sequential workflow: `"hello world"` → `UpperCaseAgent` → `"HELLO WORLD"` → `ReverseAgent` → `"DLROW OLLEH"`.
 
 ---
 
@@ -101,6 +96,7 @@ using System.Threading.Tasks;
 using Azure.AI.OpenAI;
 using Azure.Identity;
 using Microsoft.Agents.AI;
+using OpenAI.Chat;
 using Microsoft.Agents.AI.Workflows;
 using Microsoft.Extensions.AI;
 
@@ -115,46 +111,6 @@ var chatClient = new AzureOpenAIClient(new Uri(endpoint), new AzureCliCredential
 // WORKFLOW: Topic → Research → Write Summary → Output
 // ══════════════════════════════════════════════════════════════════════════════
 
-// ── Step 1: Research executor — uses an agent to gather facts ────────────────
-class ResearchExecutor : Executor
-{
-    private readonly AIAgent _agent;
-
-    public ResearchExecutor(AIAgent agent) => _agent = agent;
-
-    [Handler]
-    public async Task Research(string topic, WorkflowContext<string> ctx)
-    {
-        Console.WriteLine($"  [Research] Researching: '{topic}'...");
-
-        var prompt = $"Research the following topic and provide 5 key facts as bullet points: {topic}";
-        var result = await _agent.RunAsync(prompt);
-
-        Console.WriteLine($"  [Research] Done — passing facts to next step.");
-        await ctx.SendMessageAsync(result.ToString()!);
-    }
-}
-
-// ── Step 2: Writer executor — uses an agent to write a summary ───────────────
-class WriterExecutor : Executor
-{
-    private readonly AIAgent _agent;
-
-    public WriterExecutor(AIAgent agent) => _agent = agent;
-
-    [Handler]
-    public async Task Write(string facts, WorkflowContext<Never, string> ctx)
-    {
-        Console.WriteLine($"  [Writer] Writing summary from facts...");
-
-        var prompt = $"Based on these research facts, write a concise 3-sentence summary paragraph suitable for a blog post:\n\n{facts}";
-        var result = await _agent.RunAsync(prompt);
-
-        Console.WriteLine($"  [Writer] Done.");
-        await ctx.YieldOutputAsync(result.ToString()!);
-    }
-}
-
 // ── Create the agents ────────────────────────────────────────────────────────
 AIAgent researchAgent = chatClient.AsAIAgent(
     instructions: "You are a research assistant. When given a topic, provide clear, factual bullet points. Be concise and accurate.",
@@ -164,13 +120,8 @@ AIAgent writerAgent = chatClient.AsAIAgent(
     instructions: "You are a professional writer. Transform research notes into polished, engaging prose. Keep it concise — 3 sentences maximum.",
     name: "WriterAgent");
 
-// ── Build the workflow graph ─────────────────────────────────────────────────
-var research = new ResearchExecutor(researchAgent);
-var writer = new WriterExecutor(writerAgent);
-
-var workflow = new AgentWorkflowBuilder(startExecutor: research)
-    .AddEdge(research, writer)
-    .Build();
+// ── Build and run the workflow ───────────────────────────────────────────────
+var workflow = AgentWorkflowBuilder.BuildSequential([researchAgent, writerAgent]);
 
 // ── Run it! ──────────────────────────────────────────────────────────────────
 Console.WriteLine("═══════════════════════════════════════════════════════");
@@ -182,14 +133,15 @@ var topic = "The impact of artificial intelligence on healthcare";
 Console.WriteLine($"Topic: {topic}");
 Console.WriteLine();
 
-var output = await workflow.RunAsync(topic);
+var result = await InProcessExecution.Default.RunAsync(workflow, topic);
 
 Console.WriteLine();
 Console.WriteLine("═══════════════════════════════════════════════════════");
 Console.WriteLine("  FINAL OUTPUT:");
 Console.WriteLine("═══════════════════════════════════════════════════════");
 Console.WriteLine();
-Console.WriteLine(string.Join("\n", output.GetOutputs()));
+Console.WriteLine(result);
+
 ```
 
 ### Step 5: Run the Agent Workflow
@@ -198,7 +150,7 @@ Console.WriteLine(string.Join("\n", output.GetOutputs()));
 dotnet run
 ```
 
-**Observe:** The research agent generates facts, those facts flow through the edge to the writer agent, which produces a polished summary.
+**Observe:** The research agent generates facts, those facts flow sequentially to the writer agent, which produces a polished summary.
 
 ---
 
@@ -246,7 +198,7 @@ Hint: Look into `AddEdge` with multiple sources or `BuildConcurrent` patterns.
 - [ ] Simple function workflow runs: UpperCase → Reverse
 - [ ] Agent workflow runs: Research → Writer
 - [ ] You can see data flowing between steps via the console logs
-- [ ] You understand the difference between `SendMessageAsync` (forward to next) and `YieldOutputAsync` (final output)
+- [ ] You understand how `AgentWorkflowBuilder.BuildSequential` chains agents together
 
 ---
 

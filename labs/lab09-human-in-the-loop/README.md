@@ -7,9 +7,9 @@
 
 ## What You'll Learn
 
-- How to mark function tools as requiring human approval
-- How to detect approval requests in agent responses
-- How to build an approval loop (approve/reject/show details)
+- How to use function invocation middleware to intercept sensitive tool calls
+- How to prompt for human approval before executing sensitive operations
+- How to build an approval flow (approve/reject with details)
 - When and why human-in-the-loop matters for production agents
 
 ---
@@ -24,18 +24,22 @@ dotnet add package Azure.Identity
 dotnet add package Microsoft.Agents.AI.OpenAI --prerelease
 ```
 
-## Step 2: Create Tools with Approval Requirements
+## Step 2: Create Tools with Approval Middleware
 
 Replace `Program.cs`:
 
 ```csharp
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Azure.AI.OpenAI;
 using Azure.Identity;
 using Microsoft.Agents.AI;
 using Microsoft.Extensions.AI;
+using OpenAI.Chat;
 
 var endpoint = Environment.GetEnvironmentVariable("AZURE_OPENAI_ENDPOINT")
     ?? throw new InvalidOperationException("Set AZURE_OPENAI_ENDPOINT");
@@ -52,86 +56,80 @@ static string SendEmail(
     [Description("Recipient email address.")] string to,
     [Description("Email subject line.")] string subject,
     [Description("Email body text.")] string body)
-{
-    // In production, this would actually send an email
-    return $"✅ Email sent to {to} with subject '{subject}'.";
-}
+    => $"✅ Email sent to {to} with subject '{subject}'.";
 
 [Description("Place an order for a product. This charges the customer's account.")]
 static string PlaceOrder(
     [Description("Product name.")] string product,
     [Description("Quantity to order.")] int quantity)
-{
-    return $"✅ Order placed: {quantity}x {product}.";
-}
+    => $"✅ Order placed: {quantity}x {product}.";
 
-// ── Wrap sensitive tools with approval requirement ───────────────────────────
-AIFunction weatherTool = AIFunctionFactory.Create(GetWeather);
-AIFunction emailTool = new ApprovalRequiredAIFunction(AIFunctionFactory.Create(SendEmail));
-AIFunction orderTool = new ApprovalRequiredAIFunction(AIFunctionFactory.Create(PlaceOrder));
+// Sensitive functions that require approval
+var sensitiveFunctions = new HashSet<string> { "SendEmail", "PlaceOrder" };
 
-// ── Create the agent ─────────────────────────────────────────────────────────
-AIAgent agent = new AzureOpenAIClient(new Uri(endpoint), new AzureCliCredential())
+AIAgent baseAgent = new AzureOpenAIClient(new Uri(endpoint), new AzureCliCredential())
     .GetChatClient(deploymentName)
     .AsAIAgent(
         instructions: """
             You are a helpful assistant that can check weather, send emails, and place orders.
             Always confirm the details before taking action.
             """,
-        tools: [weatherTool, emailTool, orderTool]);
+        tools: [
+            AIFunctionFactory.Create(GetWeather),
+            AIFunctionFactory.Create(SendEmail),
+            AIFunctionFactory.Create(PlaceOrder),
+        ]);
 
-// ── Approval loop ────────────────────────────────────────────────────────────
-AgentSession session = await agent.CreateSessionAsync();
-
-async Task<string> AskAgent(string question)
-{
-    Console.WriteLine($"\n❓ User: {question}");
-    AgentResponse response = await agent.RunAsync(question, session);
-
-    // Check if any tool calls need approval
-    var approvalRequests = response.Messages
-        .SelectMany(m => m.Contents)
-        .OfType<FunctionApprovalRequestContent>()
-        .ToList();
-
-    if (approvalRequests.Count == 0)
+// ── Add approval middleware via function invocation ───────────────────────────
+#pragma warning disable MEAI001
+AIAgent agent = baseAgent
+    .AsBuilder()
+    .Use(async (AIAgent a, FunctionInvocationContext ctx,
+                Func<FunctionInvocationContext, CancellationToken, ValueTask<object?>> next,
+                CancellationToken ct) =>
     {
-        // No approval needed — return the response directly
-        return response.ToString()!;
-    }
+        // Check if this function requires approval
+        if (sensitiveFunctions.Any(s => ctx.Function.Name.Contains(s, StringComparison.OrdinalIgnoreCase)))
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine($"\n  ⚠️  Approval required for: {ctx.Function.Name}");
+            if (ctx.Arguments != null)
+                foreach (var arg in ctx.Arguments)
+                    Console.WriteLine($"      {arg.Key} = {arg.Value}");
+            Console.ResetColor();
 
-    // Process each approval request
-    foreach (var request in approvalRequests)
-    {
-        Console.ForegroundColor = ConsoleColor.Yellow;
-        Console.WriteLine($"\n  ⚠️  Approval required for: {request.FunctionCall.Name}");
-        Console.WriteLine($"      Arguments: {request.FunctionCall.Arguments}");
-        Console.ResetColor();
+            Console.Write("  Approve? (y/n): ");
+            var input = Console.ReadLine()?.Trim().ToLower();
+            bool approved = input == "y" || input == "yes";
 
-        Console.Write("  Approve? (y/n): ");
-        var input = Console.ReadLine()?.Trim().ToLower();
-        bool approved = input == "y" || input == "yes";
+            if (approved)
+            {
+                Console.WriteLine("  ✅ Approved!");
+                return await next(ctx, ct);
+            }
+            else
+            {
+                Console.WriteLine("  ❌ Rejected.");
+                return $"Action '{ctx.Function.Name}' was rejected by the user.";
+            }
+        }
 
-        Console.WriteLine(approved ? "  ✅ Approved!" : "  ❌ Rejected.");
-
-        // Send the approval/rejection back to the agent
-        var approvalMessage = new ChatMessage(
-            ChatRole.User, [request.CreateResponse(approved)]);
-        response = await agent.RunAsync(approvalMessage, session);
-    }
-
-    return response.ToString()!;
-}
+        // Safe functions pass through without approval
+        return await next(ctx, ct);
+    })
+    .Build();
+#pragma warning restore MEAI001
 
 // ── Test scenarios ───────────────────────────────────────────────────────────
 Console.WriteLine("═══ Scenario 1: Safe tool (no approval needed) ═══");
-Console.WriteLine($"💬 {await AskAgent("What's the weather in Amsterdam?")}");
+Console.WriteLine($"💬 {await agent.RunAsync("What's the weather in Amsterdam?")}");
 
 Console.WriteLine("\n═══ Scenario 2: Sensitive tool (needs approval) ═══");
-Console.WriteLine($"💬 {await AskAgent("Send an email to alice@example.com with subject 'Meeting tomorrow' and body 'Hi Alice, can we meet at 2pm?'")}");
+Console.WriteLine($"💬 {await agent.RunAsync("Send an email to alice@example.com with subject 'Meeting tomorrow' and body 'Hi Alice, can we meet at 2pm?'")}");
 
 Console.WriteLine("\n═══ Scenario 3: Another sensitive tool ═══");
-Console.WriteLine($"💬 {await AskAgent("Order 3 units of Widget Pro.")}");
+Console.WriteLine($"💬 {await agent.RunAsync("Order 3 units of Widget Pro.")}");
+
 ```
 
 ## Step 3: Run It
@@ -142,8 +140,8 @@ dotnet run
 
 **Observe:**
 - Weather queries execute immediately (no approval needed)
-- Email and order tools pause and ask for human confirmation
-- Rejecting a tool call results in the agent adapting its response
+- Email and order tools are intercepted by middleware and prompt for approval
+- Rejecting a tool call returns a rejection message to the agent
 
 ---
 

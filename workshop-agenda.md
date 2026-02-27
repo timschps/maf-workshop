@@ -23,26 +23,32 @@
 | 14:00 – 16:30 | Hackathon: Add Agentic Experience to Partner App| Hack        |
 | 16:30 – 17:00 | Show & Tell + Wrap-up                          | Presentation|
 
-## Lab Overview (14 Labs)
+## Lab Overview (20 Labs)
 
-| #  | Lab                          | Duration | Module | Difficulty |
-|----|------------------------------|----------|--------|------------|
-| 1  | Hello Agent                  | 15 min   | 1      | ⭐         |
-| 2  | Personas & Prompt Engineering| 10 min   | 1      | ⭐         |
-| 3  | Function Tools               | 15 min   | 2      | ⭐⭐       |
-| 4  | Multi-Tool Agents            | 15 min   | 2      | ⭐⭐       |
-| 5  | Structured Output            | 10 min   | 2      | ⭐⭐       |
-| 6  | Multi-Turn Conversations     | 15 min   | 3      | ⭐⭐       |
-| 7  | Context Providers            | 15 min   | 3      | ⭐⭐       |
-| 8  | Middleware Pipeline          | 15 min   | 3      | ⭐⭐⭐     |
-| 9  | Human-in-the-Loop            | 15 min   | 3      | ⭐⭐⭐     |
-| 10 | Agent-as-a-Tool              | 15 min   | 4      | ⭐⭐⭐     |
-| 11 | Simple Workflows             | 15 min   | 4      | ⭐⭐⭐     |
-| 12 | Agent Workflows              | 20 min   | 4      | ⭐⭐⭐⭐   |
-| 13 | Observability & Telemetry    | 20 min   | 4      | ⭐⭐⭐     |
-| 14 | Hosting & A2A Protocol       | 20 min   | 4      | ⭐⭐⭐⭐   |
+| #  | Lab                              | Duration | Module | Difficulty |
+|----|----------------------------------|----------|--------|------------|
+| 1  | Hello Agent                      | 15 min   | 1      | ⭐         |
+| 2  | Personas & Prompt Engineering    | 10 min   | 1      | ⭐         |
+| 3  | Function Tools                   | 15 min   | 2      | ⭐⭐       |
+| 4  | Multi-Tool Agents                | 15 min   | 2      | ⭐⭐       |
+| 5  | Structured Output                | 10 min   | 2      | ⭐⭐       |
+| 6  | Multi-Turn Conversations         | 15 min   | 3      | ⭐⭐       |
+| 7  | Context Providers                | 15 min   | 3      | ⭐⭐       |
+| 8  | Middleware Pipeline              | 15 min   | 3      | ⭐⭐⭐     |
+| 9  | Human-in-the-Loop                | 15 min   | 3      | ⭐⭐⭐     |
+| 10 | Agent-as-a-Tool                  | 15 min   | 4      | ⭐⭐⭐     |
+| 11 | Simple Workflows                 | 15 min   | 4      | ⭐⭐⭐     |
+| 12 | Agent Workflows                  | 20 min   | 4      | ⭐⭐⭐⭐   |
+| 13 | Observability & Telemetry        | 20 min   | 4      | ⭐⭐⭐     |
+| 14 | Hosting & A2A Protocol           | 20 min   | 4      | ⭐⭐⭐⭐   |
+| 15 | MCP Tools Integration            | 20 min   | 5      | ⭐⭐⭐     |
+| 16 | Agent as MCP Server              | 15 min   | 5      | ⭐⭐⭐     |
+| 17 | A2A Client — Calling Remote Agents | 20 min | 5      | ⭐⭐⭐⭐   |
+| 18 | Handoff Workflows                | 25 min   | 5      | ⭐⭐⭐⭐   |
+| 19 | Concurrent Workflows             | 25 min   | 5      | ⭐⭐⭐⭐   |
+| 20 | Hosted Multi-Agent Workflow      | 25 min   | 5      | ⭐⭐⭐⭐⭐ |
 
-> **Note:** Not all labs need to be completed before the hackathon. Labs 1–9 cover core concepts; Labs 10–14 are advanced topics for fast-paced participants.
+> **Note:** Not all labs need to be completed before the hackathon. Labs 1–9 cover core concepts; Labs 10–14 are advanced topics; Labs 15–20 are expert-level MCP, A2A, and multi-agent patterns for fast-paced participants.
 
 ---
 
@@ -224,6 +230,47 @@
 
 ---
 
+### 🟢 Module 5 — MCP, A2A & Multi-Agent Patterns (Advanced)
+
+**Goal:** Master open protocols (MCP, A2A) and advanced multi-agent orchestration patterns.
+
+#### Theory (10 min)
+
+- **Model Context Protocol (MCP)**
+  - Open standard for agent ↔ tool integration
+  - MCP servers expose tools, resources, and prompts
+  - Consuming MCP tools: `McpClient.CreateAsync()` + `ListToolsAsync()`
+  - Exposing agents as MCP servers: `McpServerTool.Create(agent.AsAIFunction())`
+
+- **A2A (Agent-to-Agent) Protocol — Beyond Hosting**
+  - `A2AAgent` as a client proxy to call remote agents
+  - Agent discovery via agent cards
+  - Cross-framework interoperability
+
+- **Advanced Workflow Patterns:**
+  | Pattern | API | Use Case |
+  |---------|-----|----------|
+  | Handoff | `CreateHandoffBuilderWith()` | Triage → specialist routing |
+  | Concurrent | `BuildConcurrent()` | Parallel agents with merge |
+  | Group Chat | `CreateGroupChatBuilderWith()` | Multi-agent discussion |
+  | Hosted Workflow | `AddWorkflow().AddAsAIAgent()` | Workflow-as-service |
+
+#### 🔬 Lab 15: MCP Tools Integration (20 min) → [labs/lab15-mcp-tools](./labs/lab15-mcp-tools/)
+
+#### 🔬 Lab 16: Agent as MCP Server (15 min) → [labs/lab16-agent-as-mcp-server](./labs/lab16-agent-as-mcp-server/)
+
+#### 🔬 Lab 17: A2A Client — Calling Remote Agents (20 min) → [labs/lab17-a2a-client](./labs/lab17-a2a-client/)
+
+#### 🔬 Lab 18: Handoff Workflows (25 min) → [labs/lab18-conditional-workflows](./labs/lab18-conditional-workflows/)
+
+#### 🔬 Lab 19: Concurrent Workflows (25 min) → [labs/lab19-parallel-workflows](./labs/lab19-parallel-workflows/)
+
+#### 🔬 Lab 20: Hosted Multi-Agent Workflow (25 min) → [labs/lab20-hosted-multi-agent](./labs/lab20-hosted-multi-agent/)
+
+> **Note:** Labs 15–20 are expert-level and designed for participants who finish the core labs ahead of schedule. They cover the most advanced MAF patterns and are excellent preparation for the hackathon.
+
+---
+
 ## PART 2 — HACKATHON (13:30 – 17:00)
 
 ---
@@ -324,12 +371,16 @@
 | `AgentSession` | Conversation state container for multi-turn interactions |
 | Function Tools | C#/Python methods exposed as callable tools for the agent |
 | MCP Tools | External tool servers connected via Model Context Protocol |
+| MCP Server | Expose your agent as a tool for other MCP-compatible clients |
 | Context Providers | Inject persistent context (memory) into agent runs |
 | Middleware | Intercept & modify agent runs, function calls, or LLM calls |
 | Workflows | Graph-based multi-step orchestration with typed routing |
 | Agent-as-Tool | Nest one agent inside another as a callable function |
+| Handoff Workflows | Triage agent routes to specialist agents based on query type |
+| Concurrent Workflows | Multiple agents process in parallel with result merging |
 | AG-UI | Protocol for rich agent ↔ UI communication |
-| A2A | Agent-to-Agent protocol for cross-system interop |
+| A2A Server | Expose agents via the Agent-to-Agent protocol (HTTP) |
+| `A2AAgent` | Client proxy to call remote agents over A2A protocol |
 
 ### B. Useful NuGet Packages / pip Packages
 
@@ -338,7 +389,11 @@
 Microsoft.Agents.AI.OpenAI
 Azure.AI.OpenAI
 Azure.Identity
-Microsoft.Agents.AI.Hosting.AGUI.AspNetCore  (for AG-UI hosting)
+Microsoft.Agents.AI.Workflows           (workflows, handoffs, concurrent)
+Microsoft.Agents.AI.Hosting.A2A.AspNetCore  (A2A hosting)
+Microsoft.Agents.AI.A2A                  (A2A client proxy)
+ModelContextProtocol                     (MCP server + client)
+Microsoft.Agents.AI.Hosting.AGUI.AspNetCore  (AG-UI hosting)
 ```
 
 **Python:**

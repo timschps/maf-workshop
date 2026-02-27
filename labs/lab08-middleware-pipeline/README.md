@@ -40,114 +40,90 @@ using Azure.AI.OpenAI;
 using Azure.Identity;
 using Microsoft.Agents.AI;
 using Microsoft.Extensions.AI;
+using OpenAI.Chat;
 
 var endpoint = Environment.GetEnvironmentVariable("AZURE_OPENAI_ENDPOINT")
     ?? throw new InvalidOperationException("Set AZURE_OPENAI_ENDPOINT");
 var deploymentName = Environment.GetEnvironmentVariable("AZURE_OPENAI_DEPLOYMENT_NAME") ?? "gpt-4o-mini";
 
-// ── Tool ─────────────────────────────────────────────────────────────────────
 [Description("Get the current weather for a given city.")]
 static string GetWeather([Description("The city name.")] string city)
     => $"Weather in {city}: sunny, {Random.Shared.Next(15, 30)}°C.";
 
-// ══════════════════════════════════════════════════════════════════════════════
-// MIDDLEWARE 1: Security — blocks sensitive content
-// ══════════════════════════════════════════════════════════════════════════════
-static async Task<AgentResponse> SecurityMiddleware(
-    IEnumerable<ChatMessage> messages,
-    AgentSession? session,
-    AgentRunOptions? options,
-    AIAgent innerAgent,
-    CancellationToken ct)
-{
-    var lastMessage = messages.LastOrDefault()?.Text ?? "";
-    var blocked = new[] { "password", "secret", "credit card", "ssn", "api key" };
+int turnCount = 0;
 
-    if (blocked.Any(kw => lastMessage.Contains(kw, StringComparison.OrdinalIgnoreCase)))
-    {
-        Console.ForegroundColor = ConsoleColor.Red;
-        Console.WriteLine("  🛡️ [Security] BLOCKED — sensitive content detected");
-        Console.ResetColor();
-        return new AgentResponse(
-            [new ChatMessage(ChatRole.Assistant, "I can't process requests containing sensitive information.")]);
-    }
-
-    Console.ForegroundColor = ConsoleColor.Green;
-    Console.WriteLine("  🛡️ [Security] Passed");
-    Console.ResetColor();
-    return await innerAgent.RunAsync(messages, session, options, ct);
-}
-
-// ══════════════════════════════════════════════════════════════════════════════
-// MIDDLEWARE 2: Logging — tracks turn count and message volume
-// ══════════════════════════════════════════════════════════════════════════════
-static int turnCount = 0;
-
-static async Task<AgentResponse> LoggingMiddleware(
-    IEnumerable<ChatMessage> messages,
-    AgentSession? session,
-    AgentRunOptions? options,
-    AIAgent innerAgent,
-    CancellationToken ct)
-{
-    turnCount++;
-    var sw = Stopwatch.StartNew();
-
-    Console.ForegroundColor = ConsoleColor.DarkGray;
-    Console.WriteLine($"  📊 [Logging] Turn #{turnCount} | Input messages: {messages.Count()}");
-    Console.ResetColor();
-
-    var response = await innerAgent.RunAsync(messages, session, options, ct);
-    sw.Stop();
-
-    Console.ForegroundColor = ConsoleColor.DarkGray;
-    Console.WriteLine($"  📊 [Logging] Turn #{turnCount} | Response msgs: {response.Messages.Count} | Duration: {sw.ElapsedMilliseconds}ms");
-    Console.ResetColor();
-
-    return response;
-}
-
-// ══════════════════════════════════════════════════════════════════════════════
-// MIDDLEWARE 3: Function call logging — tracks tool invocations
-// ══════════════════════════════════════════════════════════════════════════════
-static async ValueTask<object?> FunctionLoggingMiddleware(
-    AIFunction function,
-    IReadOnlyList<KeyValuePair<string, object?>> arguments,
-    CancellationToken ct,
-    Func<IReadOnlyList<KeyValuePair<string, object?>>, CancellationToken, ValueTask<object?>> next)
-{
-    var args = string.Join(", ", arguments.Select(a => $"{a.Key}={a.Value}"));
-    Console.ForegroundColor = ConsoleColor.Cyan;
-    Console.WriteLine($"  🔧 [FuncLog] → {function.Name}({args})");
-    Console.ResetColor();
-
-    var sw = Stopwatch.StartNew();
-    var result = await next(arguments, ct);
-    sw.Stop();
-
-    Console.ForegroundColor = ConsoleColor.Cyan;
-    Console.WriteLine($"  🔧 [FuncLog] ← {function.Name} returned in {sw.ElapsedMilliseconds}ms");
-    Console.ResetColor();
-
-    return result;
-}
-
-// ── Create agent with middleware pipeline ─────────────────────────────────────
 AIAgent baseAgent = new AzureOpenAIClient(new Uri(endpoint), new AzureCliCredential())
     .GetChatClient(deploymentName)
     .AsAIAgent(
         instructions: "You are a helpful weather assistant.",
         tools: [AIFunctionFactory.Create(GetWeather)]);
 
-// Middleware order matters! Security first, then logging.
+#pragma warning disable MEAI001
 AIAgent agent = baseAgent
     .AsBuilder()
-        .Use(runFunc: SecurityMiddleware)
-        .Use(runFunc: LoggingMiddleware)
-        .Use(FunctionLoggingMiddleware)
-    .Build();
+    // Agent run middleware: security check + logging
+    .Use(
+        // runFunc — intercepts RunAsync calls
+        async (IEnumerable<ChatMessage> messages, AgentSession? session,
+               AgentRunOptions? options, AIAgent innerAgent, CancellationToken ct) =>
+        {
+            // ── Security check ───────────────────────────────────────────────
+            var lastMessage = messages.LastOrDefault()?.Text ?? "";
+            var blocked = new[] { "password", "secret", "credit card", "ssn", "api key" };
 
-// ── Test the pipeline ────────────────────────────────────────────────────────
+            if (blocked.Any(kw => lastMessage.Contains(kw, StringComparison.OrdinalIgnoreCase)))
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("  🛡️ [Security] BLOCKED — sensitive content detected");
+                Console.ResetColor();
+                return new AgentResponse(
+                    [new ChatMessage(ChatRole.Assistant,
+                        "I can't process requests containing sensitive information.")]);
+            }
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("  🛡️ [Security] Passed");
+            Console.ResetColor();
+
+            // ── Logging ──────────────────────────────────────────────────────
+            turnCount++;
+            var sw = Stopwatch.StartNew();
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.WriteLine($"  📊 [Logging] Turn #{turnCount} | Input messages: {messages.Count()}");
+            Console.ResetColor();
+
+            var response = await innerAgent.RunAsync(messages, session, options, ct);
+            sw.Stop();
+
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.WriteLine($"  📊 [Logging] Turn #{turnCount} | Response msgs: {response.Messages.Count} | Duration: {sw.ElapsedMilliseconds}ms");
+            Console.ResetColor();
+            return response;
+        },
+        // runStreamingFunc — null means streaming uses the default behavior
+        null
+    )
+    // Function invocation middleware: log tool calls
+    .Use(async (AIAgent a, FunctionInvocationContext ctx,
+                Func<FunctionInvocationContext, CancellationToken, ValueTask<object?>> next,
+                CancellationToken ct) =>
+    {
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.WriteLine($"  🔧 [FuncLog] → {ctx.Function.Name}(...)");
+        Console.ResetColor();
+
+        var sw = Stopwatch.StartNew();
+        var result = await next(ctx, ct);
+        sw.Stop();
+
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.WriteLine($"  🔧 [FuncLog] ← {ctx.Function.Name} returned in {sw.ElapsedMilliseconds}ms");
+        Console.ResetColor();
+        return result;
+    })
+    .Build();
+#pragma warning restore MEAI001
+
 AgentSession session = await agent.CreateSessionAsync();
 
 Console.WriteLine("═══ Test 1: Normal question (triggers tool) ═══\n");
@@ -164,6 +140,7 @@ Console.WriteLine();
 
 Console.WriteLine("═══ Test 4: No tool needed ═══\n");
 Console.WriteLine(await agent.RunAsync("What's the capital of France?", session));
+
 ```
 
 ## Step 3: Run and Observe
@@ -219,9 +196,9 @@ static async ValueTask<object?> DisclaimerMiddleware(
 
 ### Exercise C (Stretch): Middleware Ordering Experiment
 
-1. Put `LoggingMiddleware` BEFORE `SecurityMiddleware` — what changes?
-2. Remove security middleware — does the blocked query now succeed?
-3. **Key insight:** Middleware order = execution order. Security should always be first.
+1. Move the security check logic AFTER the logging logic inside the `.Use()` call — what changes?
+2. Remove the security check entirely — does the blocked query now succeed?
+3. **Key insight:** In the combined `.Use()` call, the order of logic within the lambda determines execution order. Security checks should always run first.
 
 ---
 

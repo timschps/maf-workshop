@@ -54,6 +54,7 @@ using System;
 using Azure.AI.OpenAI;
 using Azure.Identity;
 using Microsoft.Agents.AI;
+using OpenAI.Chat;
 
 // ── Read configuration from environment ──────────────────────────────────────
 var endpoint = Environment.GetEnvironmentVariable("AZURE_OPENAI_ENDPOINT")

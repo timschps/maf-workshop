@@ -36,6 +36,7 @@ using System.ComponentModel;
 using Azure.AI.OpenAI;
 using Azure.Identity;
 using Microsoft.Agents.AI;
+using OpenAI.Chat;
 using Microsoft.Extensions.AI;
 
 // ── Configuration ────────────────────────────────────────────────────────────

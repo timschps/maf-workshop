@@ -34,7 +34,10 @@ using System.ComponentModel;
 using Azure.AI.OpenAI;
 using Azure.Identity;
 using Microsoft.Agents.AI;
+using OpenAI.Chat;
+using Microsoft.Agents.AI.Hosting;
 using Microsoft.Agents.AI.Hosting.A2A;
+using Microsoft.Extensions.AI;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -56,7 +59,7 @@ static string GetTime([Description("Timezone, e.g. UTC, EST, CET")] string timez
     => $"Current time in {timezone}: {DateTime.UtcNow:HH:mm:ss} UTC";
 
 // ── Register the agent via Dependency Injection ──────────────────────────────
-builder.AddAIAgent(
+var agentBuilder = builder.AddAIAgent(
     name: "TravelAssistant",
     instructions: """
         You are a helpful travel assistant. You can provide weather information
@@ -64,11 +67,7 @@ builder.AddAIAgent(
         friendly. When asked about a destination, proactively share both weather
         and time information.
         """,
-    chatClient: chatClient,
-    tools: [
-        AIFunctionFactory.Create(GetWeather),
-        AIFunctionFactory.Create(GetTime)
-    ]);
+    chatClient: chatClient.AsIChatClient());
 
 var app = builder.Build();
 
@@ -77,7 +76,7 @@ app.MapGet("/health", () => Results.Ok(new { status = "healthy", agent = "Travel
 
 // ── Map the A2A protocol endpoint ────────────────────────────────────────────
 // This exposes the agent as an A2A-compatible endpoint at /a2a/travel-assistant
-app.MapA2A("TravelAssistant", "/a2a/travel-assistant");
+app.MapA2A(agentBuilder, "/a2a/travel-assistant");
 
 Console.WriteLine("╔══════════════════════════════════════════════════════════════╗");
 Console.WriteLine("║  Travel Assistant API is running!                           ║");
@@ -150,14 +149,13 @@ Add a `GetFlightInfo` tool that returns mock flight information. Test it via the
 Register a second agent (e.g., `RestaurantAdvisor`) and map it to `/a2a/restaurant-advisor`. Test both:
 
 ```csharp
-builder.AddAIAgent(
+var restaurantBuilder = builder.AddAIAgent(
     name: "RestaurantAdvisor",
     instructions: "You recommend restaurants based on cuisine and location.",
-    chatClient: chatClient,
-    tools: [...]);
+    chatClient: chatClient.AsIChatClient());
 
 // Later:
-app.MapA2A("RestaurantAdvisor", "/a2a/restaurant-advisor");
+app.MapA2A(restaurantBuilder, "/a2a/restaurant-advisor");
 ```
 
 ### Exercise C (Stretch): Agent-to-Agent Communication

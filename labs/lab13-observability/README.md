@@ -37,6 +37,7 @@ using System.ComponentModel;
 using Azure.AI.OpenAI;
 using Azure.Identity;
 using Microsoft.Agents.AI;
+using OpenAI.Chat;
 using Microsoft.Extensions.AI;
 using OpenTelemetry;
 using OpenTelemetry.Trace;
@@ -61,21 +62,17 @@ using var tracerProvider = Sdk.CreateTracerProviderBuilder()
 static string GetWeather([Description("City name.")] string city)
     => $"Weather in {city}: sunny, {Random.Shared.Next(15, 30)}°C.";
 
-// ── Create an instrumented chat client ───────────────────────────────────────
-var instrumentedClient = new AzureOpenAIClient(new Uri(endpoint), new AzureCliCredential())
+// ── Create an instrumented agent via the builder pipeline ────────────────────
+var agent = new AzureOpenAIClient(new Uri(endpoint), new AzureCliCredential())
     .GetChatClient(deploymentName)
     .AsIChatClient()
     .AsBuilder()
     .UseOpenTelemetry(sourceName: SourceName, configure: cfg => cfg.EnableSensitiveData = true)
-    .Build();
-
-// ── Create an instrumented agent ─────────────────────────────────────────────
-var agent = new ChatClientAgent(
-    instrumentedClient,
-    name: "TelemetryAgent",
-    instructions: "You are a helpful weather assistant.",
-    tools: [AIFunctionFactory.Create(GetWeather)]
-).WithOpenTelemetry(sourceName: SourceName, enableSensitiveData: true);
+    .Build()
+    .AsAIAgent(
+        name: "TelemetryAgent",
+        instructions: "You are a helpful weather assistant.",
+        tools: [AIFunctionFactory.Create(GetWeather)]);
 
 // ── Run the agent and observe telemetry ──────────────────────────────────────
 Console.WriteLine("═══ Running agent with OpenTelemetry ═══\n");
