@@ -1,15 +1,16 @@
 # Lab 15: MCP Tools Integration
 
-## Objective
+**Duration:** 20 minutes
+**Objective:** Connect your agent to an external **Model Context Protocol (MCP)** server and use its tools. MCP is an open standard that lets agents discover and call tools exposed by any MCP-compatible server — giving your agent access to external data sources, APIs, and services without writing custom tool code.
 
-Connect your agent to an external **Model Context Protocol (MCP)** server and use its tools. MCP is an open standard that lets agents discover and call tools exposed by any MCP-compatible server — giving your agent access to external data sources, APIs, and services without writing custom tool code.
+---
 
 ## What You'll Learn
 
-- How to connect to an MCP server using the official C# SDK
-- How to retrieve tools from an MCP server and pass them to an agent
+- How to connect to an MCP server and retrieve its tools
 - How agents use MCP tools via function calling (just like local tools)
 - The difference between stdio and HTTP-based MCP transports
+- How to pass discovered MCP tools to an agent
 
 ## Prerequisites
 
@@ -17,97 +18,16 @@ Connect your agent to an external **Model Context Protocol (MCP)** server and us
 - Node.js installed (for running the MCP test server)
 - Azure OpenAI endpoint configured
 
-## Duration
+---
 
-20 minutes
+## Implementation
 
-## Steps
+Choose your language:
 
-### Step 1: Create a new console application
+- **[C# (.NET)](./csharp.md)**
+- **[Python](./python.md)**
 
-```bash
-dotnet new console -n Lab15_McpTools
-cd Lab15_McpTools
-```
-
-### Step 2: Add NuGet packages
-
-```bash
-dotnet add package Azure.AI.OpenAI --prerelease
-dotnet add package Azure.Identity
-dotnet add package Microsoft.Agents.AI.OpenAI --prerelease
-dotnet add package Microsoft.Extensions.AI --prerelease
-dotnet add package ModelContextProtocol --prerelease
-```
-
-### Step 3: Replace Program.cs
-
-Replace the contents of `Program.cs` with:
-
-```csharp
-using System;
-using System.Linq;
-using Azure.AI.OpenAI;
-using Azure.Identity;
-using Microsoft.Agents.AI;
-using Microsoft.Extensions.AI;
-using ModelContextProtocol.Client;
-using OpenAI.Chat;
-
-#pragma warning disable MEAI001
-
-var endpoint = Environment.GetEnvironmentVariable("AZURE_OPENAI_ENDPOINT")
-    ?? throw new InvalidOperationException("Set AZURE_OPENAI_ENDPOINT");
-var deploymentName = Environment.GetEnvironmentVariable("AZURE_OPENAI_DEPLOYMENT_NAME") ?? "gpt-4o-mini";
-
-// --- Step A: Connect to an MCP server ---
-// The "everything" test server exposes sample tools (echo, add, etc.)
-Console.WriteLine("🔌 Connecting to MCP server...");
-
-await using var mcpClient = await McpClient.CreateAsync(
-    new StdioClientTransport(new()
-    {
-        Name = "TestMcpServer",
-        Command = "npx",
-        Arguments = ["-y", "@modelcontextprotocol/server-everything"],
-    }));
-
-// --- Step B: Retrieve tools from the MCP server ---
-var mcpTools = await mcpClient.ListToolsAsync();
-Console.WriteLine($"📦 Found {mcpTools.Count} MCP tools:");
-foreach (var tool in mcpTools)
-{
-    Console.WriteLine($"   🔧 {tool.Name}: {tool.Description}");
-}
-
-// --- Step C: Create an agent with MCP tools ---
-AIAgent agent = new AzureOpenAIClient(
-        new Uri(endpoint),
-        new AzureCliCredential())
-    .GetChatClient(deploymentName)
-    .AsAIAgent(
-        instructions: "You are a helpful assistant. Use the available tools to answer questions. When asked to echo something, use the echo tool. When asked to add numbers, use the add tool.",
-        tools: [.. mcpTools.Cast<AITool>()]);
-
-// --- Step D: Use the agent with MCP tools ---
-Console.WriteLine("\n💬 Asking agent to use MCP tools...\n");
-
-var response1 = await agent.RunAsync("Please echo back the message: 'Hello from MCP!'");
-Console.WriteLine($"Echo result: {response1}\n");
-
-var response2 = await agent.RunAsync("What is 42 + 58?");
-Console.WriteLine($"Add result: {response2}\n");
-
-Console.WriteLine("✅ MCP tools integration complete!");
-```
-
-### Step 4: Run the application
-
-```bash
-dotnet run
-```
-
-You should see the agent discover tools from the MCP server and use them to answer your questions.
+---
 
 ## Key Concepts
 
@@ -115,24 +35,15 @@ You should see the agent discover tools from the MCP server and use them to answ
 |---------|-------------|
 | **MCP Server** | A service that exposes tools, resources, and prompts via the Model Context Protocol |
 | **MCP Client** | Connects to an MCP server to discover and invoke its tools |
-| **StdioTransport** | Runs an MCP server as a local subprocess, communicating via stdin/stdout |
-| **Tool Discovery** | `ListToolsAsync()` retrieves all available tools from the server |
-| **Tool → AITool** | MCP tools are cast to `AITool` and passed to the agent like any other tool |
+| **Stdio Transport** | Runs an MCP server as a local subprocess, communicating via stdin/stdout |
+| **HTTP Transport** | Connects to a remote MCP server over HTTP |
+| **Tool Discovery** | Retrieves all available tools from the server at runtime |
 
 ## Connecting to Remote HTTP MCP Servers
 
-For remote MCP servers (like `https://staybright-demo-app.azurewebsites.net/mcp`), use `HttpClientTransport` from `ModelContextProtocol.Client`:
+For remote MCP servers (like `https://staybright-demo-app.azurewebsites.net/mcp`), use the HTTP transport instead of stdio. See the language-specific implementation guides for details.
 
-```csharp
-await using var mcpClient = await McpClient.CreateAsync(
-    new HttpClientTransport(new()
-    {
-        Name = "RemoteMcpServer",
-        Endpoint = new Uri("https://staybright-demo-app.azurewebsites.net/mcp"),
-    }));
-```
-
-> **Note:** Remote MCP servers may require authentication headers. Pass an `HttpClient` with the appropriate auth headers configured.
+> **Note:** Remote MCP servers may require authentication headers.
 
 ## Popular MCP Servers to Try
 
@@ -143,9 +54,41 @@ await using var mcpClient = await McpClient.CreateAsync(
 | `@modelcontextprotocol/server-filesystem` | `npx -y @modelcontextprotocol/server-filesystem /path` | File system access tools |
 | Azure MCP Server | [github.com/Azure/azure-mcp](https://github.com/Azure/azure-mcp) | Azure services (Storage, Cosmos DB, etc.) |
 
+---
+
+## 🏋️ Exercises
+
+### Exercise A: Explore MCP Tool Discovery
+
+Run the application and observe the tools discovered from the MCP server. Note the tool names, descriptions, and how they map to function calls.
+
+### Exercise B: Try a Remote MCP Server
+
+Switch from the local stdio transport to an HTTP-based remote MCP server. Compare the two approaches.
+
+---
+
 ## 🎯 Challenge
 
 Try connecting to the GitHub MCP server and asking the agent to summarize recent commits from a repository you like!
+
+---
+
+## ✅ Success Criteria
+
+- [ ] Agent connects to an MCP server and discovers available tools
+- [ ] Agent successfully uses MCP tools to answer questions
+- [ ] You understand the difference between stdio and HTTP transports
+- [ ] You've explored the list of available MCP tools
+
+---
+
+## 📚 References
+
+- [Model Context Protocol Specification](https://modelcontextprotocol.io/)
+- [MCP Server Registry](https://github.com/modelcontextprotocol/servers)
+
+---
 
 ## What's Next?
 

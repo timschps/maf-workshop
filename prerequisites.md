@@ -67,10 +67,21 @@ pip install azure-identity
 
 Set these before the workshop (or create a `.env` file):
 
+### C# (.NET)
+
 ```bash
 export AZURE_OPENAI_ENDPOINT="https://your-resource.openai.azure.com/"
 export AZURE_OPENAI_DEPLOYMENT_NAME="gpt-4o-mini"
 ```
+
+### Python
+
+```bash
+export AZURE_OPENAI_ENDPOINT="https://your-resource.openai.azure.com/"
+export AZURE_OPENAI_CHAT_DEPLOYMENT_NAME="gpt-4o-mini"
+```
+
+> **⚠️ Important:** C# and Python use **different** environment variable names for the deployment. C# uses `AZURE_OPENAI_DEPLOYMENT_NAME` while Python uses `AZURE_OPENAI_CHAT_DEPLOYMENT_NAME`.
 
 > **Note:** MAF does **not** auto-load `.env` files. Use `load_dotenv()` in Python or set variables in your shell/IDE.
 
