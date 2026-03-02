@@ -1083,7 +1083,7 @@ slide = content_slide("Hackathon Ground Rules")
 items = [
     "👥  Teams of 3–5 people",
     "⏱️  2.5 hours of hacking time (14:00 – 16:30)",
-    "📦  Starter code & scaffolding provided (see hackathon/starter-guide.md)",
+    "📦  Starter code & scaffolding provided (see hackathon/starter-guide-csharp.md or starter-guide-python.md)",
     "🧑‍🏫  Mentors circulating — ask for help!",
     "🎤  5-minute demo per team at the end",
     "",
