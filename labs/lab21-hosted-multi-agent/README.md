@@ -1,6 +1,6 @@
 # Lab 21: Hosted Multi-Agent Workflow
 
-[📋 Back to Lab Guide](../lab-guide.md)
+[📋 Back to Lab Guide](../../lab-guide.md)
 
 
 **Duration:** 25 minutes

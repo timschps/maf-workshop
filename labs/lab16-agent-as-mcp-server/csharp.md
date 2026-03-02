@@ -1,6 +1,6 @@
 # Lab 16: Agent as MCP Server — C# Implementation
 
-[← Back to Lab Overview](./README.md) | [📋 Lab Guide](../lab-guide.md)
+[← Back to Lab Overview](./README.md) | [📋 Lab Guide](../../lab-guide.md)
 
 ## Step 1: Create the Project
 

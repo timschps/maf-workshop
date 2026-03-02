@@ -1,6 +1,6 @@
 # Lab 8: Middleware Pipeline
 
-[📋 Back to Lab Guide](../lab-guide.md)
+[📋 Back to Lab Guide](../../lab-guide.md)
 
 
 **Duration:** 20 minutes

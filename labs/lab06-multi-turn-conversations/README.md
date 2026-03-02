@@ -1,6 +1,6 @@
 # Lab 6: Multi-Turn Conversations & Sessions
 
-[📋 Back to Lab Guide](../lab-guide.md)
+[📋 Back to Lab Guide](../../lab-guide.md)
 
 
 **Duration:** 20 minutes  

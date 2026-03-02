@@ -1,6 +1,6 @@
 # Lab 15: MCP Tools Integration
 
-[📋 Back to Lab Guide](../lab-guide.md)
+[📋 Back to Lab Guide](../../lab-guide.md)
 
 
 **Duration:** 20 minutes

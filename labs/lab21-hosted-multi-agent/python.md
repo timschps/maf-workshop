@@ -1,6 +1,6 @@
 # Lab 21: Hosted Multi-Agent Workflow — Python Implementation
 
-[← Back to Lab Overview](./README.md) | [📋 Lab Guide](../lab-guide.md)
+[← Back to Lab Overview](./README.md) | [📋 Lab Guide](../../lab-guide.md)
 
 ## Step 1: Create the Project
 

@@ -1,6 +1,6 @@
 # Lab 20: Concurrent Workflows — Parallel Agent Execution
 
-[📋 Back to Lab Guide](../lab-guide.md)
+[📋 Back to Lab Guide](../../lab-guide.md)
 
 
 **Duration:** 25 minutes

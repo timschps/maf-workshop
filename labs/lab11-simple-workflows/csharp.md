@@ -1,6 +1,6 @@
 # Lab 11: Simple Workflows — C# Implementation
 
-[← Back to Lab Overview](./README.md) | [📋 Lab Guide](../lab-guide.md)
+[← Back to Lab Overview](./README.md) | [📋 Lab Guide](../../lab-guide.md)
 
 ## Part A: Simple Function Workflow (10 min)
 

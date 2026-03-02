@@ -1,6 +1,6 @@
 # Lab 2: Agent Personas & Prompt Engineering
 
-[📋 Back to Lab Guide](../lab-guide.md)
+[📋 Back to Lab Guide](../../lab-guide.md)
 
 
 **Duration:** 15 minutes  

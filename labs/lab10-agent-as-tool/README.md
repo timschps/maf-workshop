@@ -1,6 +1,6 @@
 # Lab 10: Agent-as-a-Tool — Multi-Agent Composition
 
-[📋 Back to Lab Guide](../lab-guide.md)
+[📋 Back to Lab Guide](../../lab-guide.md)
 
 
 **Duration:** 20 minutes

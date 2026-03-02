@@ -1,6 +1,6 @@
 # Lab 14: Hosting & A2A Protocol — C# Implementation
 
-[← Back to Lab Overview](./README.md) | [📋 Lab Guide](../lab-guide.md)
+[← Back to Lab Overview](./README.md) | [📋 Lab Guide](../../lab-guide.md)
 
 ## Step 1: Create the Project
 

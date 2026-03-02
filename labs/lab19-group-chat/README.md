@@ -1,6 +1,6 @@
 # Lab 19: Group Chat — Collaborative Agent Conversations
 
-[📋 Back to Lab Guide](../lab-guide.md)
+[📋 Back to Lab Guide](../../lab-guide.md)
 
 
 **Duration:** 25 minutes

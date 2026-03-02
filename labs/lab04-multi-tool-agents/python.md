@@ -1,6 +1,6 @@
 # Lab 4: Multi-Tool Agents — Python Implementation
 
-[← Back to Lab Overview](./README.md) | [📋 Lab Guide](../lab-guide.md)
+[← Back to Lab Overview](./README.md) | [📋 Lab Guide](../../lab-guide.md)
 
 ## Step 1: Create the Project
 

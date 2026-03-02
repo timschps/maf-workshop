@@ -1,6 +1,6 @@
 # Lab 18: Handoff Workflows — Intelligent Agent Routing
 
-[📋 Back to Lab Guide](../lab-guide.md)
+[📋 Back to Lab Guide](../../lab-guide.md)
 
 
 **Duration:** 25 minutes

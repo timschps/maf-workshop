@@ -1,6 +1,6 @@
 # Lab 3: Agent with Tools — Function Calling
 
-[📋 Back to Lab Guide](../lab-guide.md)
+[📋 Back to Lab Guide](../../lab-guide.md)
 
 
 **Duration:** 25 minutes  

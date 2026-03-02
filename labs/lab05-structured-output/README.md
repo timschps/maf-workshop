@@ -1,6 +1,6 @@
 # Lab 5: Structured Output
 
-[📋 Back to Lab Guide](../lab-guide.md)
+[📋 Back to Lab Guide](../../lab-guide.md)
 
 
 **Duration:** 15 minutes  

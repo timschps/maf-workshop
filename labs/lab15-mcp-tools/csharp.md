@@ -1,6 +1,6 @@
 # Lab 15: MCP Tools Integration — C# Implementation
 
-[← Back to Lab Overview](./README.md) | [📋 Lab Guide](../lab-guide.md)
+[← Back to Lab Overview](./README.md) | [📋 Lab Guide](../../lab-guide.md)
 
 ## Step 1: Create the Project
 

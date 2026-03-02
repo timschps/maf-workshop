@@ -1,6 +1,6 @@
 # Lab 11: Simple Workflows — Function Pipelines
 
-[📋 Back to Lab Guide](../lab-guide.md)
+[📋 Back to Lab Guide](../../lab-guide.md)
 
 
 **Duration:** 15 minutes

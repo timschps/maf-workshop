@@ -1,6 +1,6 @@
 # Lab 16: Agent as MCP Server
 
-[📋 Back to Lab Guide](../lab-guide.md)
+[📋 Back to Lab Guide](../../lab-guide.md)
 
 
 **Duration:** 15 minutes

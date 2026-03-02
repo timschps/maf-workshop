@@ -1,6 +1,6 @@
 # Lab 1: Hello Agent — Your First AI Agent
 
-[📋 Back to Lab Guide](../lab-guide.md)
+[📋 Back to Lab Guide](../../lab-guide.md)
 
 
 **Duration:** 15 minutes  
