@@ -1143,7 +1143,7 @@ resources = [
     ("📚", "Official Docs", "learn.microsoft.com/agent-framework"),
     ("💻", "GitHub Repo", "github.com/microsoft/agent-framework"),
     ("🧪", "Step-by-Step Workshop", "github.com/warnov/ms-agent-framework-step-by-step-workshop"),
-    ("🌐", "Community Labs", "agentframework.dev"),
+    ("🌐", "Agent Framework", "aka.ms/agentframework"),
     ("🔄", "Migration Guides", "Semantic Kernel → MAF  |  AutoGen → MAF"),
 ]
 for i, (icon, title, url) in enumerate(resources):

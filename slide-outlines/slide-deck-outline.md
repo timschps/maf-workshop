@@ -360,7 +360,7 @@ Below are suggested slide-by-slide outlines for each section. Each slide has a *
   - 📚 [Official MAF docs](https://learn.microsoft.com/en-us/agent-framework/)
   - 💻 [GitHub repo](https://github.com/microsoft/agent-framework)
   - 🧪 [Step-by-step workshop](https://github.com/warnov/ms-agent-framework-step-by-step-workshop)
-  - 🌐 [AgentFramework.dev](https://agentframework.dev/)
+  - 🌐 [Agent Framework](https://aka.ms/agentframework)
   - 🔄 Migration guides: SK → MAF, AutoGen → MAF
 - **Notes:** Send follow-up email with all links + today's code
 

@@ -486,7 +486,7 @@
      - [Official docs](https://learn.microsoft.com/en-us/agent-framework/)
      - [GitHub repo](https://github.com/microsoft/agent-framework)
      - [Step-by-step workshop](https://github.com/warnov/ms-agent-framework-step-by-step-workshop)
-     - [AgentFramework.dev community labs](https://agentframework.dev/)
+     - [Agent Framework](https://aka.ms/agentframework)
    - Migration paths from Semantic Kernel / AutoGen
    - Feedback form
 
