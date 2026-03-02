@@ -1,5 +1,8 @@
 # Lab 13: Observability & Telemetry
 
+[📋 Back to Lab Guide](../lab-guide.md)
+
+
 **Duration:** 20 minutes
 **Objective:** Add OpenTelemetry tracing and metrics to an agent for production monitoring.
 

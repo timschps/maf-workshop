@@ -1,5 +1,8 @@
 # Lab 6: Multi-Turn Conversations & Sessions
 
+[📋 Back to Lab Guide](../lab-guide.md)
+
+
 **Duration:** 20 minutes  
 **Objective:** Build a stateful agent that maintains conversation context across multiple turns using sessions.
 

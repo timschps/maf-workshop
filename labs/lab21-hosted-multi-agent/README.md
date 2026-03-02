@@ -1,5 +1,8 @@
 # Lab 21: Hosted Multi-Agent Workflow
 
+[📋 Back to Lab Guide](../lab-guide.md)
+
+
 **Duration:** 25 minutes
 **Objective:** Build a **hosted multi-agent system** that orchestrates multiple agents in a workflow and exposes the entire pipeline as a single A2A endpoint. This is the capstone lab — combining hosting, workflows, and A2A.
 

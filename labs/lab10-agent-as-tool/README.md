@@ -1,5 +1,8 @@
 # Lab 10: Agent-as-a-Tool — Multi-Agent Composition
 
+[📋 Back to Lab Guide](../lab-guide.md)
+
+
 **Duration:** 20 minutes
 **Objective:** Build specialist agents and compose them by using one agent as a tool for another.
 

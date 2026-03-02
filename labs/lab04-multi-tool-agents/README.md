@@ -1,5 +1,8 @@
 # Lab 4: Multi-Tool Agents
 
+[📋 Back to Lab Guide](../lab-guide.md)
+
+
 **Duration:** 20 minutes  
 **Objective:** Build an agent with multiple tools and observe how the LLM decides which tool(s) to call based on the user's question.
 

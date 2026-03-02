@@ -1,6 +1,6 @@
 # Lab 17: A2A Client — Python Implementation
 
-[← Back to Lab Overview](./README.md)
+[← Back to Lab Overview](./README.md) | [📋 Lab Guide](../lab-guide.md)
 
 ## Part A: Create the A2A Server
 

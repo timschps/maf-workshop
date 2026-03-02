@@ -1,5 +1,8 @@
 # Lab 17: A2A Client — Calling Remote Agents
 
+[📋 Back to Lab Guide](../lab-guide.md)
+
+
 **Duration:** 20 minutes
 **Objective:** Use the **A2A (Agent-to-Agent) protocol** to call a remote agent hosted over HTTP. You'll first start an A2A server and then build a client that discovers and communicates with it.
 

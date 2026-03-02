@@ -1,5 +1,8 @@
 # Lab 19: Group Chat — Collaborative Agent Conversations
 
+[📋 Back to Lab Guide](../lab-guide.md)
+
+
 **Duration:** 25 minutes
 **Objective:** Build a **group chat workflow** where multiple agents collaborate in a shared conversation. A manager orchestrates who speaks next, and agents iteratively refine each other's work. You'll also explore custom termination logic that stops the conversation based on content.
 

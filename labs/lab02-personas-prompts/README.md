@@ -1,5 +1,8 @@
 # Lab 2: Agent Personas & Prompt Engineering
 
+[📋 Back to Lab Guide](../lab-guide.md)
+
+
 **Duration:** 15 minutes  
 **Objective:** Understand how system instructions dramatically shape agent behavior and learn prompt engineering basics.
 

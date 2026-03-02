@@ -1,5 +1,8 @@
 # Lab 12: Agent Workflows — LLM-Powered Pipelines
 
+[📋 Back to Lab Guide](../lab-guide.md)
+
+
 **Duration:** 20 minutes
 **Objective:** Build a workflow where real LLM agents collaborate as pipeline steps — Research → Write → Translate.
 

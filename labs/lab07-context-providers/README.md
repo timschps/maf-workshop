@@ -1,5 +1,8 @@
 # Lab 7: Context Providers & Memory
 
+[📋 Back to Lab Guide](../lab-guide.md)
+
+
 **Duration:** 20 minutes  
 **Objective:** Build a custom context provider that injects persistent knowledge into every agent run.
 

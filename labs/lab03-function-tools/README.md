@@ -1,5 +1,8 @@
 # Lab 3: Agent with Tools — Function Calling
 
+[📋 Back to Lab Guide](../lab-guide.md)
+
+
 **Duration:** 25 minutes  
 **Objective:** Give your agent the ability to call custom functions, and observe how the LLM autonomously decides when to use them.
 

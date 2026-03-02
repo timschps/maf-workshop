@@ -1,5 +1,8 @@
 # Lab 9: Human-in-the-Loop Tool Approval
 
+[📋 Back to Lab Guide](../lab-guide.md)
+
+
 **Duration:** 20 minutes
 **Objective:** Build an agent where sensitive tool calls require human approval before execution.
 

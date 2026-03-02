@@ -1,5 +1,8 @@
 # Lab 18: Handoff Workflows — Intelligent Agent Routing
 
+[📋 Back to Lab Guide](../lab-guide.md)
+
+
 **Duration:** 25 minutes
 **Objective:** Build a workflow where a **triage agent** intelligently routes customer queries to the right specialist using **handoff workflows**. You'll create a customer service system where the triage agent analyzes messages and hands off to a billing specialist or tech support agent.
 

@@ -1,5 +1,8 @@
 # Lab 5: Structured Output
 
+[📋 Back to Lab Guide](../lab-guide.md)
+
+
 **Duration:** 15 minutes  
 **Objective:** Get typed, structured responses from an agent instead of free-form text.
 

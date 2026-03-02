@@ -1,5 +1,8 @@
 # Lab 16: Agent as MCP Server
 
+[📋 Back to Lab Guide](../lab-guide.md)
+
+
 **Duration:** 15 minutes
 **Objective:** Expose a MAF agent **as an MCP server** so that any MCP-compatible client (VS Code GitHub Copilot, other agents, Claude Desktop, etc.) can discover and use your agent as a tool.
 

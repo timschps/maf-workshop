@@ -1,5 +1,8 @@
 # Lab 15: MCP Tools Integration
 
+[📋 Back to Lab Guide](../lab-guide.md)
+
+
 **Duration:** 20 minutes
 **Objective:** Connect your agent to an external **Model Context Protocol (MCP)** server and use its tools. MCP is an open standard that lets agents discover and call tools exposed by any MCP-compatible server — giving your agent access to external data sources, APIs, and services without writing custom tool code.
 

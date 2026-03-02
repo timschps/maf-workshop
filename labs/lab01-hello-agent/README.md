@@ -1,5 +1,8 @@
 # Lab 1: Hello Agent — Your First AI Agent
 
+[📋 Back to Lab Guide](../lab-guide.md)
+
+
 **Duration:** 15 minutes  
 **Objective:** Create a simple agent, invoke it, and stream its response.
 

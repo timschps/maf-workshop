@@ -1,6 +1,6 @@
 # Lab 2: Agent Personas & Prompt Engineering — Python Implementation
 
-[← Back to Lab Overview](./README.md)
+[← Back to Lab Overview](./README.md) | [📋 Lab Guide](../lab-guide.md)
 
 ## Step 1: Create the Project
 

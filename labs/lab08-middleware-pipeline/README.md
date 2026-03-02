@@ -1,5 +1,8 @@
 # Lab 8: Middleware Pipeline
 
+[📋 Back to Lab Guide](../lab-guide.md)
+
+
 **Duration:** 20 minutes
 **Objective:** Build a middleware pipeline that adds logging, security, and telemetry to an agent without modifying core logic.
 

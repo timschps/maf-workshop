@@ -1,5 +1,8 @@
 # Lab 14: Hosting & A2A Protocol
 
+[📋 Back to Lab Guide](../lab-guide.md)
+
+
 **Duration:** 20 minutes
 **Objective:** Expose an agent as a web API endpoint using ASP.NET Core and the Agent-to-Agent (A2A) protocol.
 

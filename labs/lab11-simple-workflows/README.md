@@ -1,5 +1,8 @@
 # Lab 11: Simple Workflows — Function Pipelines
 
+[📋 Back to Lab Guide](../lab-guide.md)
+
+
 **Duration:** 15 minutes
 **Objective:** Understand workflow basics by building function-based pipelines with executors and edges.
 

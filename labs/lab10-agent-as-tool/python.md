@@ -1,6 +1,6 @@
 # Lab 10: Agent-as-a-Tool — Python Implementation
 
-[← Back to Lab Overview](./README.md)
+[← Back to Lab Overview](./README.md) | [📋 Lab Guide](../lab-guide.md)
 
 ## Step 1: Create the Project
 

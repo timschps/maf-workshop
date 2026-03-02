@@ -1,5 +1,8 @@
 # Lab 20: Concurrent Workflows — Parallel Agent Execution
 
+[📋 Back to Lab Guide](../lab-guide.md)
+
+
 **Duration:** 25 minutes
 **Objective:** Build a workflow where multiple agents work **in parallel** using the concurrent pattern. A single input is distributed to multiple specialist agents simultaneously, and their results are combined by a merge function.
 
