@@ -17,6 +17,35 @@
 
 ---
 
+## Conceptual Overview
+
+```
+  Middleware wraps agent execution like layers of an onion:
+
+  ┌─ Agent Middleware ─────────────────────────────────────────┐
+  │  📝 Logging: "Agent run started..."                        │
+  │  ┌─ Agent Middleware ────────────────────────────────────┐ │
+  │  │  🔒 Security: Check permissions                       │ │
+  │  │  ┌─ Function Middleware ───────────────────────────┐  │ │
+  │  │  │  ⏱️  Timing: Measure tool execution duration     │  │ │
+  │  │  │                                                 │  │ │
+  │  │  │         ┌──────────────────────┐                │  │ │
+  │  │  │         │  Agent Core Logic    │                │  │ │
+  │  │  │         │  (LLM + Tools)       │                │  │ │
+  │  │  │         └──────────────────────┘                │  │ │
+  │  │  │                                                 │  │ │
+  │  │  │  ⏱️  "get_weather took 120ms"                    │  │ │
+  │  │  └─────────────────────────────────────────────────┘  │ │
+  │  │  🔒 "Permission granted"                              │ │
+  │  └───────────────────────────────────────────────────────┘ │
+  │  📝 "Agent run completed in 1.2s"                          │
+  └────────────────────────────────────────────────────────────┘
+
+  Each layer calls call_next() to pass control inward.
+```
+
+---
+
 ## Implementation
 
 Choose your language:

@@ -78,6 +78,39 @@
    - Provider model: Azure OpenAI, OpenAI, Anthropic, Ollama, etc.
    - Open protocols: MCP (Model Context Protocol), AG-UI, A2A
 
+```
+  MAF Architecture — The Big Picture:
+
+  ┌──────────────────────────────────────────────────────────────────────┐
+  │  Your Application                                                    │
+  │                                                                      │
+  │  ┌────────────────────────────────────────────────────────────────┐  │
+  │  │  Agent                                                        │  │
+  │  │  ┌────────────┐  ┌──────────┐  ┌──────────┐  ┌────────────┐  │  │
+  │  │  │Instructions│  │  Tools   │  │ Session  │  │ Middleware │  │  │
+  │  │  │ (persona)  │  │ (actions)│  │ (memory) │  │ (logging,  │  │  │
+  │  │  └────────────┘  └──────────┘  └──────────┘  │  security) │  │  │
+  │  │                                               └────────────┘  │  │
+  │  └──────────────────────────┬─────────────────────────────────────┘  │
+  │                             │                                        │
+  │  ┌──────────────────────────┼──────────────────────────────────────┐ │
+  │  │  Provider Layer          │                                      │ │
+  │  │  ┌──────────┐ ┌─────────┴──┐ ┌──────────┐ ┌──────────┐        │ │
+  │  │  │Azure     │ │ OpenAI     │ │Anthropic │ │ Ollama   │  ...   │ │
+  │  │  │OpenAI    │ │            │ │          │ │ (local)  │        │ │
+  │  │  └──────────┘ └────────────┘ └──────────┘ └──────────┘        │ │
+  │  └─────────────────────────────────────────────────────────────────┘ │
+  │                                                                      │
+  │  ┌──────────────────────────────────────────────────────────────────┐│
+  │  │  Integration Protocols                                          ││
+  │  │  ┌─────────┐  ┌──────────┐  ┌──────────┐  ┌────────────────┐   ││
+  │  │  │  MCP    │  │   A2A    │  │  AG-UI   │  │  Workflows     │   ││
+  │  │  │ (tools) │  │ (agents) │  │ (UI)     │  │ (orchestration)│   ││
+  │  │  └─────────┘  └──────────┘  └──────────┘  └────────────────┘   ││
+  │  └──────────────────────────────────────────────────────────────────┘│
+  └──────────────────────────────────────────────────────────────────────┘
+```
+
 **Delivery:** Slides + architecture diagrams. Interactive poll: "Where are you on the AI agent journey?"
 
 ---
@@ -139,6 +172,28 @@
   | Hosted MCP Tools | Microsoft-hosted MCP servers (Foundry) |
   | Local MCP Tools | Your own or 3rd-party MCP servers |
 
+```
+  How Tool Calling Works:
+
+  ┌──────────┐     ┌────────────────────┐     ┌──────────────────┐
+  │  User     │────▶│  Agent (LLM)       │────▶│  Azure OpenAI    │
+  │  message  │     │                    │     │                  │
+  └──────────┘     │  1. Sees tools      │     │  Decides: "I     │
+                   │  2. Sends to LLM    │     │  need to call    │
+                   │  3. LLM picks tools │     │  get_weather()"  │
+                   │  4. MAF executes    │     └──────────────────┘
+                   │  5. Result → LLM    │
+                   │  6. Final answer    │───▶ "It's 22°C in Paris"
+                   └─────────┬──────────┘
+                             │ auto-invoked
+                    ┌────────┴────────┐
+                    ▼                 ▼
+              ┌──────────┐    ┌──────────────┐
+              │get_weather│    │get_time      │
+              │(your code)│    │(your code)   │
+              └──────────┘    └──────────────┘
+```
+
 - **Structured Output** — getting typed, parseable responses from agents
 
 #### 🔬 Lab 3: Function Tools (15 min) → [labs/lab03-function-tools](./labs/lab03-function-tools/)
@@ -168,6 +223,26 @@
   - Intercept agent runs and function calls without modifying core logic
   - Three types: Agent Run, Function Calling, IChatClient
   - Common patterns: logging, security validation, content filtering
+
+```
+  Module 3 — The Agent Pipeline:
+
+  ┌─────────────────────────────────────────────────────────────────┐
+  │  Context Providers              Middleware Pipeline              │
+  │  (injected before run)          (wraps execution)               │
+  │                                                                 │
+  │  ┌──────────────────┐   ┌─ Logging ──────────────────────────┐ │
+  │  │ User Preferences │   │  ┌─ Security ───────────────────┐  │ │
+  │  │ Business Rules   │──▶│  │                              │  │ │
+  │  │ Current DateTime │   │  │  ┌──────────────────────┐    │  │ │
+  │  └──────────────────┘   │  │  │  Agent + Session     │    │  │ │
+  │                         │  │  │  (remembers turns)   │    │  │ │
+  │  ┌──────────────────┐   │  │  └──────────────────────┘    │  │ │
+  │  │ Session (history) │──▶│  └──────────────────────────────┘  │ │
+  │  │ Turn 1, 2, 3...  │   └─────────────────────────────────────┘ │
+  │  └──────────────────┘                                           │
+  └─────────────────────────────────────────────────────────────────┘
+```
 
 - **Human-in-the-Loop**
   - Requiring human approval before executing sensitive tools
@@ -199,6 +274,25 @@
   | Open-ended, conversational | Well-defined steps |
   | Autonomous tool use | Explicit control over execution |
   | Single LLM call (+ tools) | Multiple agents/functions coordinating |
+
+```
+  Orchestration Patterns:
+
+  Agent-as-Tool:         Sequential:            Handoff:
+  ┌────────────┐        ┌──┐──▶┌──┐──▶┌──┐     ┌─────────┐
+  │  Manager   │        │A │   │B │   │C │     │ Triage  │
+  │  ├─ Agent1 │        └──┘   └──┘   └──┘     └────┬────┘
+  │  ├─ Agent2 │                                ┌────┼────┐
+  │  └─ Tool   │        Concurrent:             ▼    ▼    ▼
+  └────────────┘        ┌──┐                   ┌──┐ ┌──┐ ┌──┐
+                        │A │──┐                │S1│ │S2│ │S3│
+                        ├──┤  ├─▶ Merge        └──┘ └──┘ └──┘
+                        │B │──┘
+                        └──┘    Group Chat:
+                                ┌──┐ ◀─▶ ┌──┐
+                                │A │     │B │  shared conversation
+                                └──┘ ◀─▶ └──┘
+```
 
 - **Workflow core concepts:**
   - **Graph-based architecture** — executors + edges
@@ -256,6 +350,23 @@
   | Group Chat | `CreateGroupChatBuilderWith()` | Multi-agent discussion |
   | Hosted Workflow | `AddWorkflow().AddAsAIAgent()` | Workflow-as-service |
 
+```
+  Open Protocols — How agents connect to the world:
+
+  MCP (Tools):                           A2A (Agents):
+  ┌────────┐     ┌────────────────┐     ┌────────┐     ┌────────────────┐
+  │ Agent  │────▶│ MCP Server     │     │ Agent  │────▶│ Remote Agent   │
+  │        │◀────│ (tool provider)│     │        │◀────│ (A2A server)   │
+  └────────┘     └────────────────┘     └────────┘     └────────────────┘
+  Discovers tools at runtime            Calls agents over HTTP (JSON-RPC)
+
+  Your Agent AS MCP Server:              Your Agent AS A2A Server:
+  ┌────────────────┐     ┌────────┐     ┌────────────────┐     ┌────────┐
+  │ VS Code Copilot│────▶│ Your   │     │ Other agents  │────▶│ Your   │
+  │ MCP Inspector  │◀────│ Agent  │     │ curl / apps   │◀────│ Agent  │
+  └────────────────┘     └────────┘     └────────────────┘     └────────┘
+```
+
 #### 🔬 Lab 15: MCP Tools Integration (20 min) → [labs/lab15-mcp-tools](./labs/lab15-mcp-tools/)
 
 #### 🔬 Lab 16: Agent as MCP Server (15 min) → [labs/lab16-agent-as-mcp-server](./labs/lab16-agent-as-mcp-server/)
@@ -281,6 +392,23 @@
 ### 🟠 Hackathon Briefing (13:30 – 13:45)
 
 **Goal:** Introduce the partner application and the hackathon challenge.
+
+```
+  Hackathon — Transforming an Existing App:
+
+  BEFORE (Partner App):                  AFTER (With Agentic AI):
+  ┌──────────────────────┐              ┌──────────────────────────────┐
+  │  Traditional App     │              │  Agentic App                 │
+  │  ┌──────────┐        │              │  ┌──────────┐  ┌──────────┐ │
+  │  │   UI     │        │              │  │   UI     │  │  Agent   │ │
+  │  ├──────────┤        │     ──▶      │  ├──────────┤  │ ┌──────┐ │ │
+  │  │  API /   │        │              │  │  API /   │  │ │Tools │ │ │
+  │  │ Services │        │              │  │ Services │◀─┤ │(app  │ │ │
+  │  ├──────────┤        │              │  ├──────────┤  │ │ APIs)│ │ │
+  │  │ Database │        │              │  │ Database │  │ └──────┘ │ │
+  │  └──────────┘        │              │  └──────────┘  └──────────┘ │
+  └──────────────────────┘              └──────────────────────────────┘
+```
 
 **Content:**
 

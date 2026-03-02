@@ -16,6 +16,28 @@
 
 ---
 
+## Conceptual Overview
+
+```
+  Sequential agent pipeline — each agent's output becomes the next one's input:
+
+  ┌──────────────┐     ┌──────────────┐     ┌──────────────┐
+  │  Researcher  │────▶│  Writer      │────▶│  Editor      │
+  │              │     │              │     │              │
+  │  "Find 3-5  │     │  "Write a    │     │  "Polish,    │
+  │   key facts │     │   short      │     │   fix grammar│
+  │   about..." │     │   article"   │     │   add title" │
+  │              │     │              │     │              │
+  │  Output:     │     │  Output:     │     │  Output:     │
+  │  Raw facts   │     │  Draft       │     │  Final       │
+  │  & data      │──▶  │  article     │──▶  │  article     │
+  └──────────────┘     └──────────────┘     └──────────────┘
+
+  SequentialBuilder(participants: [researcher, writer, editor]).Build()
+```
+
+---
+
 ## Implementation
 
 Choose your language:

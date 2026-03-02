@@ -17,6 +17,32 @@
 
 ---
 
+## Conceptual Overview
+
+```
+                         ┌─────────────────────────────────────────┐
+                         │  Agent (LLM)                            │
+  "What's the weather    │                                         │
+   and time in Tokyo?"   │  Reads tool descriptions, decides:      │
+  ──────────────────────▶│  → Need get_weather("Tokyo")            │
+                         │  → Need get_time("JST")                 │
+                         │                                         │
+                         │  Combines both results into one answer   │
+                         └───────┬─────────────────┬───────────────┘
+                                 │                 │
+                        ┌────────┘                 └────────┐
+                        ▼                                   ▼
+                ┌───────────────┐                  ┌───────────────┐
+                │ get_weather() │                  │  get_time()   │
+                │               │                  │               │
+                │ "22°C, sunny" │                  │ "14:30 JST"   │
+                └───────────────┘                  └───────────────┘
+
+  The LLM picks the right tool(s) — one or many — based on the question.
+```
+
+---
+
 ## Implementation
 
 Choose your language:

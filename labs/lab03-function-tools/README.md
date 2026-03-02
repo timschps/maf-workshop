@@ -17,6 +17,32 @@
 
 ---
 
+## Conceptual Overview
+
+```
+  ┌──────────┐      ┌────────────────────────────────────────────┐
+  │  User     │      │  Agent                                     │
+  │           │      │                                            │
+  │ "What's   │─────▶│  1. LLM sees tool descriptions             │
+  │  the      │      │  2. Decides: "I need get_weather()"        │
+  │  weather  │      │  3. MAF calls your function automatically  │
+  │  in       │      │  4. LLM gets result, formulates answer     │
+  │  Paris?"  │      │                                            │
+  │           │◀─────│  "The weather in Paris is 22°C, sunny"     │
+  └──────────┘      └────────────┬───────────────────────────────┘
+                                  │
+                                  │ Auto-invoked
+                                  ▼
+                         ┌──────────────────┐
+                         │  get_weather()   │
+                         │                  │
+                         │  Your function!  │
+                         │  Returns: "22°C" │
+                         └──────────────────┘
+```
+
+---
+
 ## Implementation
 
 Choose your language:

@@ -17,6 +17,37 @@
 
 ---
 
+## Conceptual Overview
+
+```
+  Agent-as-Tool: one agent uses another as a callable function
+
+  ┌──────────────────────────────────────────────────────────────┐
+  │  Manager Agent                                               │
+  │                                                              │
+  │  "What's the weather in Tokyo and tell me a joke about it"   │
+  │                                                              │
+  │  LLM sees tools:                                             │
+  │   ├── get_weather()      ← regular function tool             │
+  │   ├── ask_joke_agent()   ← agent wrapped as tool             │
+  │   └── get_time()         ← regular function tool             │
+  │                                                              │
+  │  Decides to call:                                            │
+  │   1. get_weather("Tokyo") → "22°C, sunny"                   │
+  │   2. ask_joke_agent("joke about sunny Tokyo")               │
+  │         │                                                    │
+  └─────────┼────────────────────────────────────────────────────┘
+            │
+            ▼
+  ┌───────────────────┐
+  │  Joke Agent       │  ← separate agent with own instructions
+  │  "You are a       │     runs independently, returns result
+  │   comedian..."    │
+  └───────────────────┘
+```
+
+---
+
 ## Implementation
 
 Choose your language:

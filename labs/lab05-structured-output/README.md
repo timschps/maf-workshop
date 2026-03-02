@@ -16,6 +16,33 @@
 
 ---
 
+## Conceptual Overview
+
+```
+  Free-form text output:              Structured output:
+
+  ┌──────────┐     ┌──────────┐      ┌──────────┐     ┌──────────────────┐
+  │  "Tell me │────▶│  Agent   │      │  "Tell me │────▶│  Agent +         │
+  │   about   │     │          │      │   about   │     │  response_format │
+  │   Paris"  │     └────┬─────┘      │   Paris"  │     └────┬─────────────┘
+  └──────────┘          │             └──────────┘          │
+                        ▼                                   ▼
+               "Paris is the                      {
+                capital of                          "city": "Paris",
+                France, known                       "country": "France",
+                for the Eiffel                      "population": 2161000,
+                Tower..."                           "landmarks": [
+                                                      "Eiffel Tower",
+               (string — hard                         "Louvre Museum"
+                to parse)                           ]
+                                                  }
+
+                                                  (typed object — ready
+                                                   for your code!)
+```
+
+---
+
 ## Implementation
 
 Choose your language:

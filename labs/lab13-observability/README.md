@@ -17,6 +17,32 @@
 
 ---
 
+## Conceptual Overview
+
+```
+  OpenTelemetry traces show exactly what your agent does:
+
+  Trace: agent.run("What's the weather?")
+  ├── Span: Agent Run [1.2s]
+  │   ├── Span: LLM Call #1 [0.4s]
+  │   │   └── tokens: prompt=120, completion=15
+  │   ├── Span: Tool Call: get_weather [0.3s]
+  │   │   └── args: {city: "Paris"}
+  │   ├── Span: LLM Call #2 [0.5s]
+  │   │   └── tokens: prompt=180, completion=45
+  │   └── result: "The weather in Paris is 22°C"
+  └── Total: 1.2s, 360 tokens
+
+  ┌──────────┐    ┌───────────────┐    ┌──────────────────┐
+  │  Agent    │───▶│  OTel SDK     │───▶│  Console / OTLP  │
+  │  (auto-   │    │  Collects     │    │  Jaeger, Zipkin, │
+  │  instrume │    │  traces +     │    │  App Insights    │
+  │  -nted)   │    │  metrics      │    │                  │
+  └──────────┘    └───────────────┘    └──────────────────┘
+```
+
+---
+
 ## Implementation
 
 Choose your language:

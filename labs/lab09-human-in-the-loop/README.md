@@ -17,6 +17,36 @@
 
 ---
 
+## Conceptual Overview
+
+```
+  Agent wants to call a sensitive tool → middleware intercepts:
+
+  ┌──────────┐     ┌───────────┐     ┌──────────────────┐
+  │  User     │────▶│  Agent    │────▶│  LLM decides:    │
+  │  "Send an │     │           │     │  call send_email  │
+  │   email"  │     └───────────┘     └────────┬─────────┘
+  └──────────┘                                 │
+                                               ▼
+                                ┌──────────────────────────┐
+                                │  Approval Middleware      │
+                                │                          │
+                                │  ⚠️  "Agent wants to call │
+                                │   send_email(to=bob,     │
+                                │   subject=Hello)"        │
+                                │                          │
+                                │  [Approve] or [Reject]?  │
+                                └─────────┬────────────────┘
+                                          │
+                           ┌──────────────┼──────────────┐
+                           ▼                             ▼
+                    ✅ Approved                    ❌ Rejected
+                    → execute tool                 → skip tool
+                    → agent continues              → agent told "denied"
+```
+
+---
+
 ## Implementation
 
 Choose your language:

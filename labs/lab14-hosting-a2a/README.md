@@ -17,6 +17,29 @@
 
 ---
 
+## Conceptual Overview
+
+```
+  Agent exposed as an HTTP endpoint via the A2A protocol:
+
+  ┌──────────────┐                    ┌─────────────────────────────┐
+  │  Any HTTP     │   A2A Protocol    │  Your Application           │
+  │  Client       │   (JSON-RPC)      │                             │
+  │               │                   │  ┌───────────────────────┐  │
+  │  curl         │──── POST / ──────▶│  │  Agent                │  │
+  │  another agent│                   │  │  (with tools,         │  │
+  │  web frontend │◀── Response ──────│  │   instructions, etc.) │  │
+  │               │                   │  └───────────────────────┘  │
+  └──────────────┘                    │                             │
+                                      │  GET /.well-known/          │
+  ┌──────────────┐                    │      agent.json             │
+  │  Discovery    │◀──────────────────│  → Agent Card (name,        │
+  │               │                   │    skills, capabilities)    │
+  └──────────────┘                    └─────────────────────────────┘
+```
+
+---
+
 ## Implementation
 
 Choose your language:

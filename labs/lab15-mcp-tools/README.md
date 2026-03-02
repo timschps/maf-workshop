@@ -23,6 +23,30 @@
 
 ---
 
+## Conceptual Overview
+
+```
+  MCP (Model Context Protocol) — dynamic tool discovery:
+
+  ┌──────────────┐          ┌─────────────────────────────┐
+  │  Agent       │          │  MCP Server (remote)        │
+  │              │          │                             │
+  │  "What tools │──GET────▶│  tools/list                 │
+  │   do you     │          │  → get_products()           │
+  │   have?"     │◀─────────│  → search_inventory()       │
+  │              │          │  → check_price()            │
+  │              │          └─────────────────────────────┘
+  │  Now uses    │                       │
+  │  them like   │──POST tools/call─────▶│
+  │  local tools │◀── result ────────────│
+  └──────────────┘
+
+  The agent doesn't know the tools at compile time —
+  it discovers them from the MCP server at runtime!
+```
+
+---
+
 ## Implementation
 
 Choose your language:

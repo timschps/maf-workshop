@@ -17,6 +17,29 @@
 
 ---
 
+## Conceptual Overview
+
+```
+  Without session (stateless):        With session (stateful):
+
+  Turn 1: "I like Italian food"       Turn 1: "I like Italian food"
+  Agent:  "Great choice!"             Agent:  "Great choice!"
+                                               │
+                                               ▼ stored in session
+  Turn 2: "What should I eat?"        Turn 2: "What should I eat?"
+  Agent:  "I don't know your          Agent:  "Based on your love of
+           preferences..."  ❌                  Italian food, try
+                                               pasta carbonara!" ✅
+  ┌──────────┐                        ┌──────────┐    ┌─────────────┐
+  │  Agent    │  no memory            │  Agent    │◀──│  Session     │
+  │           │  between calls        │           │──▶│             │
+  └──────────┘                        └──────────┘    │ Turn 1: ... │
+                                                      │ Turn 2: ... │
+                                                      └─────────────┘
+```
+
+---
+
 ## Implementation
 
 Choose your language:

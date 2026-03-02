@@ -22,6 +22,28 @@
 
 ---
 
+## Conceptual Overview
+
+```
+  Flip the script: your agent IS the MCP server
+
+  ┌──────────────────────┐          ┌──────────────────────────┐
+  │  MCP Client          │          │  Your MCP Server         │
+  │                      │          │                          │
+  │  VS Code Copilot     │──stdio──▶│  tools/list              │
+  │  MCP Inspector       │          │  → ask_joke_agent()      │
+  │  Any MCP client      │          │                          │
+  │                      │          │  tools/call              │
+  │  "Tell me a joke     │──────────▶  → runs your Agent      │
+  │   about cats"        │          │    → LLM generates joke  │
+  │                      │◀─────────│  → returns result        │
+  └──────────────────────┘          └──────────────────────────┘
+
+  Your MAF agent becomes a tool for external MCP clients!
+```
+
+---
+
 ## Implementation
 
 Choose your language:

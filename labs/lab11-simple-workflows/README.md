@@ -17,6 +17,33 @@
 
 ---
 
+## Conceptual Overview
+
+```
+  Workflows give you explicit control over execution flow:
+
+  ┌────────────┐      ┌────────────┐      ┌────────────┐
+  │  Executor  │─────▶│  Executor  │─────▶│  Executor  │
+  │  "Fetch"   │ edge │  "Process" │ edge │  "Format"  │
+  │            │      │            │      │            │
+  │  Function  │      │  Function  │      │  Function  │
+  └────────────┘      └────────────┘      └────────────┘
+
+  WorkflowBuilder
+    .SetStart("fetch")
+    .AddEdge("fetch" → "process")
+    .AddEdge("process" → "format")
+    .Build()
+
+  vs. Agents (open-ended):        vs. Workflows (explicit):
+  ┌──────────┐                    ┌──┐──▶┌──┐──▶┌──┐
+  │  LLM     │  decides what      │A │   │B │   │C │
+  │  decides │  to do next        └──┘   └──┘   └──┘
+  └──────────┘                    You define the path
+```
+
+---
+
 ## Implementation
 
 Choose your language:

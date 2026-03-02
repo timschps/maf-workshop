@@ -16,6 +16,34 @@
 
 ---
 
+## Conceptual Overview
+
+```
+  Same LLM, different instructions → completely different behavior:
+
+  ┌──────────────────┐      ┌────────────┐      ┌──────────────────────┐
+  │  "What should I  │─────▶│            │─────▶│ "Arrr! Ye must sail  │
+  │   visit in       │      │  🏴‍☠️ Pirate  │      │  to the Eiffel Tower │
+  │   Paris?"        │      │  Agent     │      │  matey!"             │
+  └──────────────────┘      └────────────┘      └──────────────────────┘
+
+  ┌──────────────────┐      ┌────────────┐      ┌──────────────────────┐
+  │  "What should I  │─────▶│            │─────▶│ "O Paris! City of   │
+  │   visit in       │      │  📜 Poet    │      │  light and love,     │
+  │   Paris?"        │      │  Agent     │      │  thy towers..."      │
+  └──────────────────┘      └────────────┘      └──────────────────────┘
+
+  ┌──────────────────┐      ┌────────────┐      ┌──────────────────────┐
+  │  "What should I  │─────▶│            │─────▶│ "1. Eiffel Tower     │
+  │   visit in       │      │  🗺️ Expert  │      │  2. Louvre Museum    │
+  │   Paris?"        │      │  Agent     │      │  3. Notre-Dame..."   │
+  └──────────────────┘      └────────────┘      └──────────────────────┘
+
+  The only difference: the system instructions (persona).
+```
+
+---
+
 ## Implementation
 
 Choose your language:

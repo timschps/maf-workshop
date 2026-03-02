@@ -16,6 +16,37 @@
 
 ---
 
+## Conceptual Overview
+
+```
+  Session history stores conversation;
+  Context providers inject external knowledge before every run:
+
+  ┌──────────────────────────────────────────────────────────┐
+  │  Agent Run                                               │
+  │                                                          │
+  │  ┌─────────────────┐   injected before    ┌───────────┐ │
+  │  │ Context Provider │──────each run───────▶│           │ │
+  │  │                  │                      │   Agent   │ │
+  │  │ "Today is Monday │                      │           │ │
+  │  │  User prefers    │                      │  System   │ │
+  │  │  metric units"   │                      │  prompt + │ │
+  │  └─────────────────┘                       │  context  │ │
+  │                                            │  + user   │ │
+  │  ┌─────────────────┐                       │  message  │ │
+  │  │ Another Provider │─────────────────────▶│           │ │
+  │  │                  │                      └───────────┘ │
+  │  │ "Company policy: │                                    │
+  │  │  no discounts    │                                    │
+  │  │  over 20%"       │                                    │
+  │  └─────────────────┘                                     │
+  └──────────────────────────────────────────────────────────┘
+
+  Context providers add dynamic knowledge the LLM doesn't have.
+```
+
+---
+
 ## Implementation
 
 Choose your language:
