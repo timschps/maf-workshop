@@ -40,10 +40,15 @@ Create a file named `main.py`:
 ```python
 import asyncio
 import random
+from collections.abc import Awaitable, Callable
 
-from agent_framework import tool
+from agent_framework import tool, FunctionMiddleware, FunctionInvocationContext
 from agent_framework.azure import AzureOpenAIChatClient
 from azure.identity import AzureCliCredential
+
+
+# ── Define which tools are sensitive ──────────────────────────────────────────
+SENSITIVE_TOOLS = {"send_email", "place_order"}
 
 
 # ── Safe tool: no approval needed ─────────────────────────────────────────────
@@ -53,17 +58,39 @@ def get_weather(city: str) -> str:
     return f"Weather in {city}: sunny, {random.randint(15, 30)}°C."
 
 
-# ── Sensitive tools: require approval ─────────────────────────────────────────
-@tool(approval_mode="always_require")
+# ── Sensitive tools ───────────────────────────────────────────────────────────
+@tool
 def send_email(to: str, subject: str, body: str) -> str:
     """Send an email to a recipient with a subject and body. This sends a real email."""
     return f"✅ Email sent to {to} with subject '{subject}'."
 
 
-@tool(approval_mode="always_require")
+@tool
 def place_order(product: str, quantity: int) -> str:
     """Place an order for a product. This charges the customer's account."""
     return f"✅ Order placed: {quantity}x {product}."
+
+
+# ── Approval middleware ───────────────────────────────────────────────────────
+class ApprovalMiddleware(FunctionMiddleware):
+    """Intercepts sensitive tool calls and prompts for user approval."""
+
+    async def process(
+        self,
+        context: FunctionInvocationContext,
+        call_next: Callable[[], Awaitable[None]],
+    ) -> None:
+        if context.function.name in SENSITIVE_TOOLS:
+            print(f"\n  ⚠️  Tool '{context.function.name}' wants to execute:")
+            for key, value in context.arguments.items():
+                print(f"     {key}: {value}")
+            approval = input("  Approve? (y/n): ").strip().lower()
+            if approval not in ("y", "yes"):
+                context.result = "❌ Action rejected by the user."
+                print("  → Rejected\n")
+                return
+            print("  → Approved\n")
+        await call_next()
 
 
 async def main():
@@ -74,6 +101,7 @@ async def main():
             "and place orders. Always confirm the details before taking action."
         ),
         tools=[get_weather, send_email, place_order],
+        middleware=[ApprovalMiddleware()],
     )
 
     # ── Test scenarios ────────────────────────────────────────────────────────
@@ -103,32 +131,40 @@ python main.py
 ```
 
 **Observe:**
-- Weather queries execute immediately (no approval needed)
-- Email and order tools trigger the framework's approval flow before execution
-- The `approval_mode="always_require"` decorator handles the approval prompt automatically
+- Weather queries execute immediately (no approval prompt)
+- Email and order tools show the arguments and ask you to approve (y/n)
+- Rejected tools return a rejection message to the agent
+- The `ApprovalMiddleware` intercepts tool calls based on the `SENSITIVE_TOOLS` set
 
-### Exercise B: Approval with Details
+> **Note:** Python's `approval_mode="always_require"` on `@tool` is designed for interactive/streaming flows and does **not** work with the simple `agent.run()` call. Use `FunctionMiddleware` (as shown above) for approval with `agent.run()`.
 
-Use `FunctionMiddleware` to customize the approval prompt with richer details:
+### Exercise B: Tool-Specific Approval Details
+
+Enhance the middleware to show tool-specific context in the approval prompt:
 
 ```python
-from collections.abc import Awaitable, Callable
-from agent_framework import FunctionMiddleware, FunctionInvocationContext
-
-
 class DetailedApprovalMiddleware(FunctionMiddleware):
     async def process(
         self,
         context: FunctionInvocationContext,
         call_next: Callable[[], Awaitable[None]],
     ) -> None:
-        if "send_email" in context.function.name:
+        name = context.function.name
+        if name == "send_email":
             print(f"  📧 To: {context.arguments.get('to')}")
             print(f"  📝 Subject: {context.arguments.get('subject')}")
             approval = input("  Send this email? (y/n): ").strip().lower()
-            if approval not in ("y", "yes"):
-                context.result = "Action rejected by the user."
-                return
+        elif name == "place_order":
+            print(f"  📦 Product: {context.arguments.get('product')}")
+            print(f"  🔢 Quantity: {context.arguments.get('quantity')}")
+            approval = input("  Place this order? (y/n): ").strip().lower()
+        else:
+            await call_next()
+            return
+
+        if approval not in ("y", "yes"):
+            context.result = "Action rejected by the user."
+            return
         await call_next()
 ```
 
