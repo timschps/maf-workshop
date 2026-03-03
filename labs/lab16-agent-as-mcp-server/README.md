@@ -15,6 +15,24 @@
 - How to host the MCP server over stdio transport
 - How other MCP clients can discover and call your agent
 
+## When to Use This Pattern
+
+Exposing your agent as an MCP server is the right choice when:
+
+- **You want your agent usable from any MCP client** — VS Code Copilot, Claude Desktop, MCP Inspector, or any other tool that speaks MCP can discover and call your agent without custom integration code.
+- **Tool ecosystem interoperability** — Your agent's capabilities become standardized tools that other agents or IDEs can compose alongside tools from other MCP servers (e.g., GitHub, file system, databases).
+- **You're building a shared capability** — Instead of each team embedding your agent's logic, you expose it as a service that any MCP-aware consumer can use (e.g., a "company knowledge base agent" or "code review agent").
+
+**When NOT to use it:**
+
+| Instead of MCP Server… | Use… | Why |
+|-------------------------|------|-----|
+| Consumers are other MAF agents (in-process) | **Agent-as-Tool** (Lab 10) | Simpler, no network overhead |
+| Consumers are remote agents | **A2A** (Lab 14/17) | Purpose-built for agent-to-agent collaboration, supports task delegation and streaming |
+| It's a simple internal workflow | **Direct function call or Workflow** (Lab 11/12) | Less complexity, no protocol overhead |
+
+> **Rule of thumb:** MCP Server = "make my agent's tools available to the broader tool ecosystem (IDEs, other frameworks)." A2A = "make my agent available to other agents."
+
 ## Prerequisites
 
 - Completed Lab 1 (Hello Agent)
