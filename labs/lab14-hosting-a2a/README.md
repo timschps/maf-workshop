@@ -15,6 +15,23 @@
 - How to test your hosted agent with HTTP calls
 - How AG-UI can expose agents to web frontends
 
+## When to Use This Pattern
+
+Use **A2A hosting** when your agent needs to be callable over the network:
+
+- **Cross-team collaboration** — other teams call your agent without sharing code
+- **Cross-language interop** — a Python agent calling a C# agent (or vice versa)
+- **Microservice architecture** — agents as independently deployable services
+- **Third-party access** — external partners can use your agent via HTTP
+
+**Comparison with alternatives:**
+
+| Pattern | Transport | Best for |
+|---------|-----------|----------|
+| **A2A Hosting** (this lab) | HTTP (JSON-RPC) | Agent-to-agent, cross-network |
+| **MCP Server** (Lab 16) | stdio or HTTP | Exposing tools to IDEs and tool consumers |
+| **Agent-as-Tool** (Lab 10) | In-process | Same codebase, no network overhead |
+
 ---
 
 ## Conceptual Overview

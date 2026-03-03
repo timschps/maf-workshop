@@ -15,6 +15,23 @@
 - The difference between Agent-as-Tool (simple) and Workflows (explicit orchestration)
 - When to use each pattern
 
+## When to Use This Pattern
+
+Use **Agent-as-Tool** when the LLM should dynamically decide which specialist to call:
+
+- **Manager → specialist pattern** — an orchestrator delegates to experts (data analyst, recommender, writer)
+- **Optional delegation** — the manager can answer directly or escalate to a specialist
+- **Simple composition** — you want multi-agent without the complexity of workflows
+
+**Comparison with alternatives:**
+
+| Pattern | Who decides routing? | Process boundary | Best for |
+|---------|---------------------|-----------------|----------|
+| **Agent-as-Tool** (this lab) | LLM decides | In-process | Dynamic delegation, optional specialists |
+| **Workflows** (Lab 11/12) | You decide (code) | In-process | Deterministic pipelines, fixed steps |
+| **A2A** (Lab 14/17) | Your code | Cross-network | Remote agents, cross-language |
+| **Group Chat** (Lab 19) | Turn-taking | In-process | Collaborative discussion |
+
 ---
 
 ## Conceptual Overview

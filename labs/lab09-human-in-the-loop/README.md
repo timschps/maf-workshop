@@ -15,6 +15,23 @@
 - How to build an approval flow (approve/reject with details)
 - When and why human-in-the-loop matters for production agents
 
+## When to Use This Pattern
+
+Use **human-in-the-loop** when certain agent actions are too risky to execute automatically:
+
+- **Irreversible actions** — deleting data, sending emails, processing payments
+- **High-cost operations** — API calls that incur charges, resource provisioning
+- **Compliance requirements** — regulated industries requiring human oversight
+- **Trust building** — early deployment stages where you want to verify agent behavior
+
+**When full automation is fine:**
+
+| Scenario | Approach |
+|----------|----------|
+| Read-only operations (search, lookup) | **No approval needed** — safe by nature |
+| Internal low-risk tools | **Auto-approve** — approval adds unnecessary friction |
+| High-risk but time-critical | **Post-hoc audit** (Lab 13 Observability) instead of blocking |
+
 ---
 
 ## Conceptual Overview

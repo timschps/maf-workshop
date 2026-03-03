@@ -15,6 +15,23 @@
 - How a triage agent delegates to specialist agents
 - Processing agent responses from workflow execution
 
+## When to Use This Pattern
+
+Use **handoff workflows** when routing depends on the content of the user's request:
+
+- **Triage → specialist** — a front-door agent routes to billing, support, or sales based on the question
+- **Intent-based routing** — different agent expertise for different intents
+- **Escalation paths** — simple questions handled directly, complex ones handed off to specialists
+
+**When alternatives are better:**
+
+| Scenario | Use |
+|----------|-----|
+| Fixed step order, not content-dependent | **Sequential Workflows** (Lab 11/12) |
+| LLM should decide dynamically | **Agent-as-Tool** (Lab 10) — LLM picks the specialist |
+| All agents should discuss together | **Group Chat** (Lab 19) |
+| Steps are independent and can parallelize | **Concurrent Workflows** (Lab 20) |
+
 ## Prerequisites
 
 - Completed Lab 11 (Simple Workflows)

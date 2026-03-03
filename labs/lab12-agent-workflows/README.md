@@ -14,6 +14,22 @@
 - How agent output flows as typed messages between workflow steps
 - How to build a practical content generation pipeline
 
+## When to Use This Pattern
+
+Use **agent workflows** when each step in your pipeline benefits from LLM reasoning:
+
+- **Content pipelines** — draft → review → edit → finalize (each step needs creative judgment)
+- **Analysis chains** — summarize → critique → synthesize (iterative refinement)
+- **Multi-perspective processing** — different agent personas analyze the same input sequentially
+
+**When to choose a different pattern:**
+
+| Scenario | Use |
+|----------|-----|
+| Steps are pure code (no LLM needed) | **Simple Workflows** (Lab 11) — faster, cheaper |
+| LLM should decide which agents to call | **Agent-as-Tool** (Lab 10) — dynamic routing |
+| Agents should discuss together | **Group Chat** (Lab 19) — shared conversation |
+
 ---
 
 ## Conceptual Overview

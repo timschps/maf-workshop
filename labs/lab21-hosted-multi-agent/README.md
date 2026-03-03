@@ -15,6 +15,17 @@
 - Exposing a multi-agent workflow via the A2A protocol
 - The complete end-to-end pattern for hosted multi-agent systems
 
+## When to Use This Pattern
+
+Use **hosted multi-agent workflows** when you need a production-ready multi-agent service:
+
+- **Production deployment** — expose a complete agent system as a single API endpoint
+- **Encapsulation** — consumers see one agent, but internally it's a coordinated workflow
+- **Scalability** — deploy as a microservice with independent scaling
+- **Combines everything** — hosting (Lab 14) + workflows (Lab 11/12) + agent composition (Lab 10)
+
+> **This is the "graduation" pattern** — it combines all the concepts from the workshop into a deployable service. Use it when you're ready to ship.
+
 ## Prerequisites
 
 - Completed Labs 11-12 (Workflows) and Lab 14 (Hosting & A2A)

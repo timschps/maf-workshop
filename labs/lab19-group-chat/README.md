@@ -15,6 +15,23 @@
 - Building custom termination logic (e.g., approval-based)
 - Processing the full conversation history from workflow output
 
+## When to Use This Pattern
+
+Use **group chat** when agents should collaborate through shared conversation:
+
+- **Review & critique** — multiple perspectives on the same artifact (code review, content editing)
+- **Brainstorming** — agents build on each other's ideas
+- **Debate / red-teaming** — agents with opposing viewpoints challenge each other
+- **Consensus building** — agents converge on a shared recommendation
+
+**When alternatives are better:**
+
+| Scenario | Use |
+|----------|-----|
+| Fixed processing order | **Sequential Workflows** (Lab 11/12) — more predictable |
+| One agent delegates to specialists | **Agent-as-Tool** (Lab 10) or **Handoff** (Lab 18) |
+| Independent tasks, no interaction needed | **Concurrent Workflows** (Lab 20) — faster |
+
 ## Prerequisites
 
 - Completed Lab 11 (Simple Workflows) and Lab 18 (Handoff Workflows)

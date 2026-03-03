@@ -15,6 +15,22 @@
 - How to register multiple tools with an agent
 - How to compose agents (Agent-as-a-Tool pattern)
 
+## When to Use This Pattern
+
+Use **function tools** when your agent needs to take actions or access live data beyond the LLM's training knowledge:
+
+- **Your business logic** — database queries, API calls, calculations, service operations
+- **Real-time data** — current weather, stock prices, order status, inventory levels
+- **Actions with side effects** — sending emails, creating records, triggering workflows
+
+**When NOT to use function tools:**
+
+| Instead of writing a function tool… | Use… | Why |
+|--------------------------------------|------|-----|
+| Tool already exists as an MCP server | **MCP Tools** (Lab 15) | No code to write — just connect |
+| Agent just needs general knowledge | **Better instructions** (Lab 2) | The LLM likely already knows it |
+| Tool is another agent | **Agent-as-Tool** (Lab 10) | Designed for agent composition |
+
 ---
 
 ## Conceptual Overview

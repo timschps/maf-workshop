@@ -15,6 +15,22 @@
 - The difference between stateful (with session) and stateless (without session) calls
 - How to serialize and restore sessions for persistence
 
+## When to Use This Pattern
+
+Use **sessions** when your agent needs to remember previous turns in a conversation:
+
+- **Conversational apps** — chatbots, assistants, support agents where users follow up
+- **Multi-step tasks** — gathering information across turns ("What's your name?" → "And your email?")
+- **Personalization** — the agent adapts based on what the user already said
+
+**When stateless is better:**
+
+| Scenario | Use |
+|----------|-----|
+| Single-shot Q&A, one-off tasks | **Stateless** — no session overhead |
+| Batch processing / pipelines | **Stateless** — each input is independent |
+| User follows up or refines requests | **Sessions** — context carries across turns |
+
 ---
 
 ## Conceptual Overview

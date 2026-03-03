@@ -15,6 +15,22 @@
 - How all agents receive the same input simultaneously
 - Processing merged results from workflow output
 
+## When to Use This Pattern
+
+Use **concurrent workflows** when independent tasks can run in parallel for speed:
+
+- **Multi-perspective analysis** — sentiment + keyword + summary of the same text, simultaneously
+- **Fan-out / fan-in** — send the same input to N agents, merge results
+- **Latency reduction** — 3 agents running in parallel take ~1x time, not ~3x
+
+**When sequential is better:**
+
+| Scenario | Use |
+|----------|-----|
+| Step B depends on Step A's output | **Sequential Workflows** (Lab 11/12) |
+| Agents need to see each other's work | **Group Chat** (Lab 19) |
+| Routing depends on content | **Handoff Workflows** (Lab 18) |
+
 ## Prerequisites
 
 - Completed Lab 11 (Simple Workflows)

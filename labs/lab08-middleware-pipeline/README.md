@@ -15,6 +15,23 @@
 - Practical patterns: logging, security, result modification
 - How to keep agent code clean while adding enterprise concerns
 
+## When to Use This Pattern
+
+Use **middleware** for cross-cutting concerns that apply to multiple agents without modifying their logic:
+
+- **Logging & telemetry** — trace every agent run and tool call
+- **Security** — validate inputs, check permissions, filter outputs
+- **Content filtering** — block harmful content before/after the LLM
+- **Rate limiting** — throttle calls per user or per agent
+
+**When middleware is overkill:**
+
+| Scenario | Use instead |
+|----------|-------------|
+| Logic specific to one agent | **Put it in the agent's instructions or tools** |
+| One-off debugging | **Temporary console.log / print statements** |
+| Full distributed tracing | **Observability** (Lab 13) — purpose-built for this |
+
 ---
 
 ## Conceptual Overview

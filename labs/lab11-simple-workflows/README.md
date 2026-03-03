@@ -15,6 +15,23 @@
 - How to chain function executors and agent executors
 - How data flows through a workflow graph
 
+## When to Use This Pattern
+
+Use **simple (function) workflows** when you need deterministic multi-step processing where each step is predictable code:
+
+- **Data pipelines** — validate → transform → enrich → store
+- **Business processes** — each step has clear inputs/outputs
+- **Mix of code and AI** — some steps are pure functions, others use agents
+
+**When to choose a different pattern:**
+
+| Scenario | Use |
+|----------|-----|
+| Every step needs LLM reasoning | **Agent Workflows** (Lab 12) |
+| The LLM should decide which steps to run | **Agent-as-Tool** (Lab 10) |
+| Steps can run in parallel | **Concurrent Workflows** (Lab 20) |
+| Routing depends on input content | **Handoff Workflows** (Lab 18) |
+
 ---
 
 ## Conceptual Overview

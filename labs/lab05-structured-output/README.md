@@ -14,6 +14,23 @@
 - How to use schema-based structured output
 - When structured output is useful (data extraction, API responses, form filling)
 
+## When to Use This Pattern
+
+Use **structured output** when downstream code needs to parse the agent's response:
+
+- **API responses** — returning JSON to a frontend or another service
+- **Data extraction** — pulling entities, facts, or fields from unstructured text
+- **Pipeline steps** — feeding agent output into another function or workflow
+- **Form filling** — mapping natural language input to typed fields
+
+**When free-form text is fine:**
+
+| Scenario | Use |
+|----------|-----|
+| Conversational chat | Free-form text — structured output adds unnecessary rigidity |
+| Creative writing / summaries | Free-form text — let the LLM be expressive |
+| Fixed format needed for code | **Structured output** — guarantees valid JSON matching your schema |
+
 ---
 
 ## Conceptual Overview

@@ -15,6 +15,17 @@
 - How to track token usage, latency, and tool calls
 - Why observability is critical for production agents
 
+## When to Use This Pattern
+
+Use **observability** whenever agents move beyond prototyping:
+
+- **Production deployments** — monitor latency, errors, and token costs
+- **Debugging** — trace exactly which tools were called, in what order, with what inputs
+- **Cost management** — track token usage per agent, per user, per workflow
+- **Compliance/audit** — log all agent decisions and tool invocations
+
+> **Rule of thumb:** If you're deploying agents to users, you need observability. It's not optional — it's how you understand what your agents are actually doing.
+
 ---
 
 ## Conceptual Overview

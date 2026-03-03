@@ -15,6 +15,23 @@
 - The difference between stdio and HTTP-based MCP transports
 - How to pass discovered MCP tools to an agent
 
+## When to Use This Pattern
+
+Use **MCP tools** when your agent needs capabilities from external providers without writing tool code:
+
+- **Third-party tool servers** — GitHub, Slack, databases, file systems that expose MCP
+- **Dynamic discovery** — tools may change without redeploying your agent
+- **Shared tool infrastructure** — one MCP server serves multiple agents/teams
+- **Rapid prototyping** — connect to existing MCP servers instead of building tools from scratch
+
+**When function tools are better:**
+
+| Scenario | Use |
+|----------|-----|
+| You control the logic and it's app-specific | **Function Tools** (Lab 3) — simpler, no server needed |
+| You need low-latency, in-process calls | **Function Tools** (Lab 3) — no network/stdio overhead |
+| Tool doesn't exist as MCP server | **Function Tools** (Lab 3) — write it yourself |
+
 ## Prerequisites
 
 - Completed Lab 1 (Hello Agent)

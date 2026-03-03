@@ -15,6 +15,23 @@
 - Agent discovery via A2A agent cards
 - How A2A enables cross-framework agent interoperability
 
+## When to Use This Pattern
+
+Use an **A2A client** when your agent needs to call a remote agent over the network:
+
+- **Consuming external agents** — calling agents built by other teams or vendors
+- **Cross-language calls** — your Python agent calling a C# agent (or vice versa)
+- **Agent marketplace** — discovering and calling agents by their A2A agent card
+- **Distributed systems** — agents running in separate processes, containers, or clouds
+
+**When alternatives are better:**
+
+| Scenario | Use |
+|----------|-----|
+| The agent is in the same codebase | **Agent-as-Tool** (Lab 10) — no network overhead |
+| You want tool-level interop (not agent-level) | **MCP** (Lab 15) — standard tool protocol |
+| You need a full orchestrated workflow | **Workflows** (Lab 11/12) — explicit control |
+
 ## Prerequisites
 
 - Completed Lab 14 (Hosting & A2A Protocol)
