@@ -36,27 +36,17 @@ Use **simple (function) workflows** when you need deterministic multi-step proce
 
 ## Conceptual Overview
 
-```
-  Workflows give you explicit control over execution flow:
-
-  ┌────────────┐      ┌────────────┐      ┌────────────┐
-  │  Executor  │─────▶│  Executor  │─────▶│  Executor  │
-  │  "Fetch"   │ edge │  "Process" │ edge │  "Format"  │
-  │            │      │            │      │            │
-  │  Function  │      │  Function  │      │  Function  │
-  └────────────┘      └────────────┘      └────────────┘
-
-  WorkflowBuilder
-    .SetStart("fetch")
-    .AddEdge("fetch" → "process")
-    .AddEdge("process" → "format")
-    .Build()
-
-  vs. Agents (open-ended):        vs. Workflows (explicit):
-  ┌──────────┐                    ┌──┐──▶┌──┐──▶┌──┐
-  │  LLM     │  decides what      │A │   │B │   │C │
-  │  decides │  to do next        └──┘   └──┘   └──┘
-  └──────────┘                    You define the path
+```mermaid
+graph LR
+    subgraph pipeline["Workflow — explicit control over execution"]
+        F["Executor: Fetch<br/>Function"] -->|edge| P["Executor: Process<br/>Function"] -->|edge| Fmt["Executor: Format<br/>Function"]
+    end
+    subgraph agents["Agent — open-ended"]
+        LLM["LLM decides<br/>what to do next"]
+    end
+    subgraph workflows["Workflow — explicit"]
+        A["A"] --> B["B"] --> C["C"]
+    end
 ```
 
 ---

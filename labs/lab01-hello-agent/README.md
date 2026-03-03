@@ -19,24 +19,17 @@
 
 ## Conceptual Overview
 
-```
-  ┌─────────────┐         ┌──────────────────┐
-  │  Your Code   │         │  Azure OpenAI    │
-  │              │         │                  │
-  │  "What       │────────▶│  LLM             │
-  │   should I   │  HTTP   │  (gpt-4o-mini)   │
-  │   visit in   │         │                  │
-  │   Paris?"    │◀────────│  "Paris is a     │
-  │              │ Response│   wonderful..."   │
-  └──────┬───────┘         └──────────────────┘
-         │
-         ▼
-  ┌──────────────┐
-  │    Agent      │  ← Wraps the LLM with instructions,
-  │  (MAF)       │    providing a simple run() / RunAsync() API
-  │              │
-  │  instructions│  "You are a helpful travel assistant..."
-  └──────────────┘
+```mermaid
+graph LR
+  Code["Your Code<br/><i>'What should I<br/>visit in Paris?'</i>"]
+  LLM["Azure OpenAI<br/>LLM (gpt-4o-mini)<br/><i>'Paris is a<br/>wonderful...'</i>"]
+  Agent["Agent (MAF)<br/>instructions:<br/><i>'You are a helpful<br/>travel assistant...'</i>"]
+
+  Code -- "HTTP Request" --> LLM
+  LLM -- "Response" --> Code
+  Code --> Agent
+
+  style Agent fill:#e0f0ff,stroke:#007acc
 ```
 
 ---

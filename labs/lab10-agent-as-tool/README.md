@@ -36,31 +36,15 @@ Use **Agent-as-Tool** when the LLM should dynamically decide which specialist to
 
 ## Conceptual Overview
 
-```
-  Agent-as-Tool: one agent uses another as a callable function
-
-  ┌──────────────────────────────────────────────────────────────┐
-  │  Manager Agent                                               │
-  │                                                              │
-  │  "What's the weather in Tokyo and tell me a joke about it"   │
-  │                                                              │
-  │  LLM sees tools:                                             │
-  │   ├── get_weather()      ← regular function tool             │
-  │   ├── ask_joke_agent()   ← agent wrapped as tool             │
-  │   └── get_time()         ← regular function tool             │
-  │                                                              │
-  │  Decides to call:                                            │
-  │   1. get_weather("Tokyo") → "22°C, sunny"                   │
-  │   2. ask_joke_agent("joke about sunny Tokyo")               │
-  │         │                                                    │
-  └─────────┼────────────────────────────────────────────────────┘
-            │
-            ▼
-  ┌───────────────────┐
-  │  Joke Agent       │  ← separate agent with own instructions
-  │  "You are a       │     runs independently, returns result
-  │   comedian..."    │
-  └───────────────────┘
+```mermaid
+graph TD
+    subgraph Manager["Manager Agent"]
+        Q["'What's the weather in Tokyo<br/>and tell me a joke about it'"]
+        Q --> T1["get_weather — function tool"]
+        Q --> T2["ask_joke_agent — agent as tool"]
+        Q --> T3["get_time — function tool"]
+    end
+    T2 -->|auto-invoked| Joke["Joke Agent<br/>'You are a comedian...'<br/>Separate agent, runs independently"]
 ```
 
 ---

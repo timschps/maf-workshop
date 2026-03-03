@@ -35,17 +35,14 @@ Use **hosted multi-agent workflows** when you need a production-ready multi-agen
 
 ## Architecture
 
-```
-                          ┌─────────────────────────────────────┐
-                          │  Host                                │
-                          │                                      │
-  HTTP Request  ────────▶ │  /a2a/content-pipeline               │
-  (A2A Protocol)          │    │                                 │
-                          │    ▼                                 │
-                          │  [Researcher] → [Writer] → [Editor]  │
-                          │                                      │
-  HTTP Response ◀──────── │  Final edited article                │
-                          └─────────────────────────────────────┘
+```mermaid
+graph LR
+    Req["HTTP Request<br/>(A2A Protocol)"] --> Endpoint["/a2a/content-pipeline"]
+    subgraph Host
+        Endpoint --> Researcher --> Writer --> Editor
+        Editor --> Result["Final edited article"]
+    end
+    Result --> Resp["HTTP Response"]
 ```
 
 ---

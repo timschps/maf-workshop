@@ -36,29 +36,34 @@ Use **middleware** for cross-cutting concerns that apply to multiple agents with
 
 ## Conceptual Overview
 
-```
-  Middleware wraps agent execution like layers of an onion:
+```mermaid
+graph TD
+  subgraph Logging["📝 Agent Middleware: Logging"]
+    direction TB
+    L1["'Agent run started...'"]
+    subgraph Security["🔒 Agent Middleware: Security"]
+      direction TB
+      S1["Check permissions"]
+      subgraph Timing["⏱️ Function Middleware: Timing"]
+        direction TB
+        T1["Measure tool execution duration"]
+        Core["Agent Core Logic<br/>(LLM + Tools)"]
+        T2["'get_weather took 120ms'"]
+        T1 --> Core --> T2
+      end
+      S2["'Permission granted'"]
+      S1 --> Timing --> S2
+    end
+    L2["'Agent run completed in 1.2s'"]
+    L1 --> Security --> L2
+  end
 
-  ┌─ Agent Middleware ─────────────────────────────────────────┐
-  │  📝 Logging: "Agent run started..."                        │
-  │  ┌─ Agent Middleware ────────────────────────────────────┐ │
-  │  │  🔒 Security: Check permissions                       │ │
-  │  │  ┌─ Function Middleware ───────────────────────────┐  │ │
-  │  │  │  ⏱️  Timing: Measure tool execution duration     │  │ │
-  │  │  │                                                 │  │ │
-  │  │  │         ┌──────────────────────┐                │  │ │
-  │  │  │         │  Agent Core Logic    │                │  │ │
-  │  │  │         │  (LLM + Tools)       │                │  │ │
-  │  │  │         └──────────────────────┘                │  │ │
-  │  │  │                                                 │  │ │
-  │  │  │  ⏱️  "get_weather took 120ms"                    │  │ │
-  │  │  └─────────────────────────────────────────────────┘  │ │
-  │  │  🔒 "Permission granted"                              │ │
-  │  └───────────────────────────────────────────────────────┘ │
-  │  📝 "Agent run completed in 1.2s"                          │
-  └────────────────────────────────────────────────────────────┘
+  Note["Each layer calls call_next() to pass control inward."]
 
-  Each layer calls call_next() to pass control inward.
+  style Core fill:#e8f5e9,stroke:#2e7d32
+  style Logging fill:#fff3e0,stroke:#e65100
+  style Security fill:#e3f2fd,stroke:#1565c0
+  style Timing fill:#fce4ec,stroke:#c62828
 ```
 
 ---

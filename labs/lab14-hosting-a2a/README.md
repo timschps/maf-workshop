@@ -36,23 +36,19 @@ Use **A2A hosting** when your agent needs to be callable over the network:
 
 ## Conceptual Overview
 
-```
-  Agent exposed as an HTTP endpoint via the A2A protocol:
+```mermaid
+graph LR
+    Client["Any HTTP Client<br/>curl / another agent<br/>web frontend"]
+    Discovery["Discovery"]
 
-  ┌──────────────┐                    ┌─────────────────────────────┐
-  │  Any HTTP     │   A2A Protocol    │  Your Application           │
-  │  Client       │   (JSON-RPC)      │                             │
-  │               │                   │  ┌───────────────────────┐  │
-  │  curl         │──── POST / ──────▶│  │  Agent                │  │
-  │  another agent│                   │  │  (with tools,         │  │
-  │  web frontend │◀── Response ──────│  │   instructions, etc.) │  │
-  │               │                   │  └───────────────────────┘  │
-  └──────────────┘                    │                             │
-                                      │  GET /.well-known/          │
-  ┌──────────────┐                    │      agent.json             │
-  │  Discovery    │◀──────────────────│  → Agent Card (name,        │
-  │               │                   │    skills, capabilities)    │
-  └──────────────┘                    └─────────────────────────────┘
+    subgraph app["Your Application"]
+        Agent["Agent<br/>with tools, instructions"]
+        Card["Agent Card<br/>name, skills, capabilities"]
+    end
+
+    Client -->|"POST / — A2A JSON-RPC"| Agent
+    Agent -->|"Response"| Client
+    Discovery -->|"GET /.well-known/agent.json"| Card
 ```
 
 ---

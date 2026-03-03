@@ -41,12 +41,11 @@ Use **handoff workflows** when routing depends on the content of the user's requ
 
 ## Architecture
 
-```
-                              ┌─ [Billing query]  → BillingSpecialist → response
-                              │
-Customer Input → TriageAgent ─┤
-                              │
-                              └─ [Tech issue]     → TechSupport → response
+```mermaid
+graph LR
+    Input["Customer Input"] --> Triage["TriageAgent"]
+    Triage -->|"Billing query"| Billing["BillingSpecialist"] --> R1["response"]
+    Triage -->|"Tech issue"| Tech["TechSupport"] --> R2["response"]
 ```
 
 ---

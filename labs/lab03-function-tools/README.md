@@ -35,26 +35,19 @@ Use **function tools** when your agent needs to take actions or access live data
 
 ## Conceptual Overview
 
-```
-  ┌──────────┐      ┌────────────────────────────────────────────┐
-  │  User     │      │  Agent                                     │
-  │           │      │                                            │
-  │ "What's   │─────▶│  1. LLM sees tool descriptions             │
-  │  the      │      │  2. Decides: "I need get_weather()"        │
-  │  weather  │      │  3. MAF calls your function automatically  │
-  │  in       │      │  4. LLM gets result, formulates answer     │
-  │  Paris?"  │      │                                            │
-  │           │◀─────│  "The weather in Paris is 22°C, sunny"     │
-  └──────────┘      └────────────┬───────────────────────────────┘
-                                  │
-                                  │ Auto-invoked
-                                  ▼
-                         ┌──────────────────┐
-                         │  get_weather()   │
-                         │                  │
-                         │  Your function!  │
-                         │  Returns: "22°C" │
-                         └──────────────────┘
+```mermaid
+graph TD
+  User["User<br/><i>'What's the weather<br/>in Paris?'</i>"]
+  Agent["Agent<br/>1. LLM sees tool descriptions<br/>2. Decides: 'I need get_weather()'<br/>3. MAF calls your function automatically<br/>4. LLM gets result, formulates answer"]
+  Tool["get_weather()<br/><b>Your function!</b><br/>Returns: '22°C'"]
+  Response["'The weather in Paris is 22°C, sunny'"]
+
+  User --> Agent
+  Agent -- "Auto-invoked" --> Tool
+  Tool --> Agent
+  Agent --> Response --> User
+
+  style Tool fill:#fff3e0,stroke:#e65100
 ```
 
 ---

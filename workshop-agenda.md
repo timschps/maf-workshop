@@ -78,37 +78,31 @@
    - Provider model: Azure OpenAI, OpenAI, Anthropic, Ollama, etc.
    - Open protocols: MCP (Model Context Protocol), AG-UI, A2A
 
-```
-  MAF Architecture — The Big Picture:
-
-  ┌──────────────────────────────────────────────────────────────────────┐
-  │  Your Application                                                    │
-  │                                                                      │
-  │  ┌────────────────────────────────────────────────────────────────┐  │
-  │  │  Agent                                                        │  │
-  │  │  ┌────────────┐  ┌──────────┐  ┌──────────┐  ┌────────────┐  │  │
-  │  │  │Instructions│  │  Tools   │  │ Session  │  │ Middleware │  │  │
-  │  │  │ (persona)  │  │ (actions)│  │ (memory) │  │ (logging,  │  │  │
-  │  │  └────────────┘  └──────────┘  └──────────┘  │  security) │  │  │
-  │  │                                               └────────────┘  │  │
-  │  └──────────────────────────┬─────────────────────────────────────┘  │
-  │                             │                                        │
-  │  ┌──────────────────────────┼──────────────────────────────────────┐ │
-  │  │  Provider Layer          │                                      │ │
-  │  │  ┌──────────┐ ┌─────────┴──┐ ┌──────────┐ ┌──────────┐        │ │
-  │  │  │Azure     │ │ OpenAI     │ │Anthropic │ │ Ollama   │  ...   │ │
-  │  │  │OpenAI    │ │            │ │          │ │ (local)  │        │ │
-  │  │  └──────────┘ └────────────┘ └──────────┘ └──────────┘        │ │
-  │  └─────────────────────────────────────────────────────────────────┘ │
-  │                                                                      │
-  │  ┌──────────────────────────────────────────────────────────────────┐│
-  │  │  Integration Protocols                                          ││
-  │  │  ┌─────────┐  ┌──────────┐  ┌──────────┐  ┌────────────────┐   ││
-  │  │  │  MCP    │  │   A2A    │  │  AG-UI   │  │  Workflows     │   ││
-  │  │  │ (tools) │  │ (agents) │  │ (UI)     │  │ (orchestration)│   ││
-  │  │  └─────────┘  └──────────┘  └──────────┘  └────────────────┘   ││
-  │  └──────────────────────────────────────────────────────────────────┘│
-  └──────────────────────────────────────────────────────────────────────┘
+```mermaid
+graph TD
+    subgraph App["Your Application"]
+        subgraph Agent["Agent"]
+            Instructions["Instructions<br/>(persona)"]
+            Tools["Tools<br/>(actions)"]
+            Session["Session<br/>(memory)"]
+            MW["Middleware<br/>(logging, security)"]
+        end
+        subgraph Providers["Provider Layer"]
+            AzureOAI["Azure OpenAI"]
+            OpenAI["OpenAI"]
+            Anthropic["Anthropic"]
+            Ollama["Ollama (local)"]
+            More["..."]
+        end
+        subgraph Protocols["Integration Protocols"]
+            MCP["MCP<br/>(tools)"]
+            A2A["A2A<br/>(agents)"]
+            AGUI["AG-UI<br/>(UI)"]
+            Workflows["Workflows<br/>(orchestration)"]
+        end
+        Agent -->|uses| Providers
+        Agent -->|connects via| Protocols
+    end
 ```
 
 **Delivery:** Slides + architecture diagrams. Interactive poll: "Where are you on the AI agent journey?"
@@ -172,26 +166,13 @@
   | Hosted MCP Tools | Microsoft-hosted MCP servers (Foundry) |
   | Local MCP Tools | Your own or 3rd-party MCP servers |
 
-```
-  How Tool Calling Works:
-
-  ┌──────────┐     ┌────────────────────┐     ┌──────────────────┐
-  │  User     │────▶│  Agent (LLM)       │────▶│  Azure OpenAI    │
-  │  message  │     │                    │     │                  │
-  └──────────┘     │  1. Sees tools      │     │  Decides: "I     │
-                   │  2. Sends to LLM    │     │  need to call    │
-                   │  3. LLM picks tools │     │  get_weather()"  │
-                   │  4. MAF executes    │     └──────────────────┘
-                   │  5. Result → LLM    │
-                   │  6. Final answer    │───▶ "It's 22°C in Paris"
-                   └─────────┬──────────┘
-                             │ auto-invoked
-                    ┌────────┴────────┐
-                    ▼                 ▼
-              ┌──────────┐    ┌──────────────┐
-              │get_weather│    │get_time      │
-              │(your code)│    │(your code)   │
-              └──────────┘    └──────────────┘
+```mermaid
+graph TD
+    User["User message"] --> Agent["Agent (LLM)<br/>1. Sees tools<br/>2. Sends to LLM<br/>3. LLM picks tools<br/>4. MAF executes<br/>5. Result → LLM<br/>6. Final answer"]
+    Agent <-->|"prompt + tool defs"| LLM["Azure OpenAI<br/>Decides: call get_weather()"]
+    Agent -->|auto-invoked| W["get_weather<br/>(your code)"]
+    Agent -->|auto-invoked| T["get_time<br/>(your code)"]
+    Agent --> Response["It's 22°C in Paris"]
 ```
 
 - **Structured Output** — getting typed, parseable responses from agents
@@ -224,24 +205,25 @@
   - Three types: Agent Run, Function Calling, IChatClient
   - Common patterns: logging, security validation, content filtering
 
-```
-  Module 3 — The Agent Pipeline:
-
-  ┌─────────────────────────────────────────────────────────────────┐
-  │  Context Providers              Middleware Pipeline              │
-  │  (injected before run)          (wraps execution)               │
-  │                                                                 │
-  │  ┌──────────────────┐   ┌─ Logging ──────────────────────────┐ │
-  │  │ User Preferences │   │  ┌─ Security ───────────────────┐  │ │
-  │  │ Business Rules   │──▶│  │                              │  │ │
-  │  │ Current DateTime │   │  │  ┌──────────────────────┐    │  │ │
-  │  └──────────────────┘   │  │  │  Agent + Session     │    │  │ │
-  │                         │  │  │  (remembers turns)   │    │  │ │
-  │  ┌──────────────────┐   │  │  └──────────────────────┘    │  │ │
-  │  │ Session (history) │──▶│  └──────────────────────────────┘  │ │
-  │  │ Turn 1, 2, 3...  │   └─────────────────────────────────────┘ │
-  │  └──────────────────┘                                           │
-  └─────────────────────────────────────────────────────────────────┘
+```mermaid
+graph LR
+    subgraph Context["Context Providers<br/>(injected before run)"]
+        UP["User Preferences"]
+        BR["Business Rules"]
+        DT["Current DateTime"]
+    end
+    subgraph History["Session (history)"]
+        Turns["Turn 1, 2, 3..."]
+    end
+    subgraph Pipeline["Middleware Pipeline (wraps execution)"]
+        subgraph Logging["Logging"]
+            subgraph Security["Security"]
+                Core["Agent + Session<br/>(remembers turns)"]
+            end
+        end
+    end
+    Context --> Pipeline
+    History --> Pipeline
 ```
 
 - **Human-in-the-Loop**
@@ -275,23 +257,28 @@
   | Autonomous tool use | Explicit control over execution |
   | Single LLM call (+ tools) | Multiple agents/functions coordinating |
 
-```
-  Orchestration Patterns:
-
-  Agent-as-Tool:         Sequential:            Handoff:
-  ┌────────────┐        ┌──┐──▶┌──┐──▶┌──┐     ┌─────────┐
-  │  Manager   │        │A │   │B │   │C │     │ Triage  │
-  │  ├─ Agent1 │        └──┘   └──┘   └──┘     └────┬────┘
-  │  ├─ Agent2 │                                ┌────┼────┐
-  │  └─ Tool   │        Concurrent:             ▼    ▼    ▼
-  └────────────┘        ┌──┐                   ┌──┐ ┌──┐ ┌──┐
-                        │A │──┐                │S1│ │S2│ │S3│
-                        ├──┤  ├─▶ Merge        └──┘ └──┘ └──┘
-                        │B │──┘
-                        └──┘    Group Chat:
-                                ┌──┐ ◀─▶ ┌──┐
-                                │A │     │B │  shared conversation
-                                └──┘ ◀─▶ └──┘
+```mermaid
+graph TD
+    subgraph AAT["Agent-as-Tool"]
+        Manager --> Agent1
+        Manager --> Agent2
+        Manager --> Tool
+    end
+    subgraph SEQ["Sequential"]
+        A1["A"] --> B1["B"] --> C1["C"]
+    end
+    subgraph HAND["Handoff"]
+        Triage --> S1
+        Triage --> S2
+        Triage --> S3
+    end
+    subgraph CONC["Concurrent"]
+        A2["A"] --> Merge
+        B2["B"] --> Merge
+    end
+    subgraph GC["Group Chat"]
+        A3["A"] <-->|shared conversation| B3["B"]
+    end
 ```
 
 - **Workflow core concepts:**
@@ -350,21 +337,20 @@
   | Group Chat | `CreateGroupChatBuilderWith()` | Multi-agent discussion |
   | Hosted Workflow | `AddWorkflow().AddAsAIAgent()` | Workflow-as-service |
 
-```
-  Open Protocols — How agents connect to the world:
-
-  MCP (Tools):                           A2A (Agents):
-  ┌────────┐     ┌────────────────┐     ┌────────┐     ┌────────────────┐
-  │ Agent  │────▶│ MCP Server     │     │ Agent  │────▶│ Remote Agent   │
-  │        │◀────│ (tool provider)│     │        │◀────│ (A2A server)   │
-  └────────┘     └────────────────┘     └────────┘     └────────────────┘
-  Discovers tools at runtime            Calls agents over HTTP (JSON-RPC)
-
-  Your Agent AS MCP Server:              Your Agent AS A2A Server:
-  ┌────────────────┐     ┌────────┐     ┌────────────────┐     ┌────────┐
-  │ VS Code Copilot│────▶│ Your   │     │ Other agents  │────▶│ Your   │
-  │ MCP Inspector  │◀────│ Agent  │     │ curl / apps   │◀────│ Agent  │
-  └────────────────┘     └────────┘     └────────────────┘     └────────┘
+```mermaid
+graph LR
+    subgraph MCP_Use["MCP (Tools)"]
+        Agent1["Agent"] <-->|discovers tools at runtime| MCPSrv["MCP Server<br/>(tool provider)"]
+    end
+    subgraph A2A_Use["A2A (Agents)"]
+        Agent2["Agent"] <-->|calls over HTTP JSON-RPC| Remote["Remote Agent<br/>(A2A server)"]
+    end
+    subgraph MCP_Serve["Your Agent AS MCP Server"]
+        VSCode["VS Code / Copilot<br/>MCP Inspector"] <--> YourAgent1["Your Agent"]
+    end
+    subgraph A2A_Serve["Your Agent AS A2A Server"]
+        Others["Other agents<br/>curl / apps"] <--> YourAgent2["Your Agent"]
+    end
 ```
 
 #### 🔬 Lab 15: MCP Tools Integration (20 min) → [labs/lab15-mcp-tools](./labs/lab15-mcp-tools/)
@@ -393,21 +379,18 @@
 
 **Goal:** Introduce the partner application and the hackathon challenge.
 
-```
-  Hackathon — Transforming an Existing App:
-
-  BEFORE (Partner App):                  AFTER (With Agentic AI):
-  ┌──────────────────────┐              ┌──────────────────────────────┐
-  │  Traditional App     │              │  Agentic App                 │
-  │  ┌──────────┐        │              │  ┌──────────┐  ┌──────────┐ │
-  │  │   UI     │        │              │  │   UI     │  │  Agent   │ │
-  │  ├──────────┤        │     ──▶      │  ├──────────┤  │ ┌──────┐ │ │
-  │  │  API /   │        │              │  │  API /   │  │ │Tools │ │ │
-  │  │ Services │        │              │  │ Services │◀─┤ │(app  │ │ │
-  │  ├──────────┤        │              │  ├──────────┤  │ │ APIs)│ │ │
-  │  │ Database │        │              │  │ Database │  │ └──────┘ │ │
-  │  └──────────┘        │              │  └──────────┘  └──────────┘ │
-  └──────────────────────┘              └──────────────────────────────┘
+```mermaid
+graph LR
+    subgraph Before["BEFORE — Traditional App"]
+        direction TB
+        UI1["UI"] --- API1["API / Services"] --- DB1["Database"]
+    end
+    Before -- transform --> After
+    subgraph After["AFTER — Agentic App"]
+        direction TB
+        UI2["UI"] --- API2["API / Services"] --- DB2["Database"]
+        AgentBox["Agent<br/>+ Tools (app APIs)"] -->|calls| API2
+    end
 ```
 
 **Content:**

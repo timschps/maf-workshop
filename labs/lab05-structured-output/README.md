@@ -35,27 +35,20 @@ Use **structured output** when downstream code needs to parse the agent's respon
 
 ## Conceptual Overview
 
-```
-  Free-form text output:              Structured output:
+```mermaid
+graph TD
+  subgraph Free["Free-form text output"]
+    Q1["'Tell me<br/>about Paris'"] --> A1["Agent"]
+    A1 --> R1["'Paris is the capital of<br/>France, known for the<br/>Eiffel Tower...'<br/><i>(string — hard to parse)</i>"]
+  end
 
-  ┌──────────┐     ┌──────────┐      ┌──────────┐     ┌──────────────────┐
-  │  "Tell me │────▶│  Agent   │      │  "Tell me │────▶│  Agent +         │
-  │   about   │     │          │      │   about   │     │  response_format │
-  │   Paris"  │     └────┬─────┘      │   Paris"  │     └────┬─────────────┘
-  └──────────┘          │             └──────────┘          │
-                        ▼                                   ▼
-               "Paris is the                      {
-                capital of                          "city": "Paris",
-                France, known                       "country": "France",
-                for the Eiffel                      "population": 2161000,
-                Tower..."                           "landmarks": [
-                                                      "Eiffel Tower",
-               (string — hard                         "Louvre Museum"
-                to parse)                           ]
-                                                  }
+  subgraph Structured["Structured output"]
+    Q2["'Tell me<br/>about Paris'"] --> A2["Agent +<br/>response_format"]
+    A2 --> R2["{ city: 'Paris',<br/>country: 'France',<br/>population: 2161000,<br/>landmarks: [...] }<br/><i>(typed object — ready<br/>for your code!)</i>"]
+  end
 
-                                                  (typed object — ready
-                                                   for your code!)
+  style Free fill:#fff8e1,stroke:#f9a825
+  style Structured fill:#e8f5e9,stroke:#2e7d32
 ```
 
 ---

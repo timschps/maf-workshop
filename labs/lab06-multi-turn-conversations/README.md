@@ -35,23 +35,23 @@ Use **sessions** when your agent needs to remember previous turns in a conversat
 
 ## Conceptual Overview
 
-```
-  Without session (stateless):        With session (stateful):
+```mermaid
+graph TD
+  subgraph Stateless["Without session (stateless)"]
+    T1a["Turn 1: 'I like Italian food'"] --> A1a["Agent: 'Great choice!'"]
+    T2a["Turn 2: 'What should I eat?'"] --> A2a["Agent: 'I don't know your<br/>preferences...' ❌"]
+    A1a -. "no memory<br/>between calls" .-> T2a
+  end
 
-  Turn 1: "I like Italian food"       Turn 1: "I like Italian food"
-  Agent:  "Great choice!"             Agent:  "Great choice!"
-                                               │
-                                               ▼ stored in session
-  Turn 2: "What should I eat?"        Turn 2: "What should I eat?"
-  Agent:  "I don't know your          Agent:  "Based on your love of
-           preferences..."  ❌                  Italian food, try
-                                               pasta carbonara!" ✅
-  ┌──────────┐                        ┌──────────┐    ┌─────────────┐
-  │  Agent    │  no memory            │  Agent    │◀──│  Session     │
-  │           │  between calls        │           │──▶│             │
-  └──────────┘                        └──────────┘    │ Turn 1: ... │
-                                                      │ Turn 2: ... │
-                                                      └─────────────┘
+  subgraph Stateful["With session (stateful)"]
+    T1b["Turn 1: 'I like Italian food'"] --> A1b["Agent: 'Great choice!'"]
+    A1b -- "stored in session" --> Session["Session<br/>Turn 1: ...<br/>Turn 2: ..."]
+    T2b["Turn 2: 'What should I eat?'"] --> A2b["Agent: 'Based on your love of<br/>Italian food, try<br/>pasta carbonara!' ✅"]
+    Session <--> A2b
+  end
+
+  style Stateless fill:#fff8e1,stroke:#f9a825
+  style Stateful fill:#e8f5e9,stroke:#2e7d32
 ```
 
 ---

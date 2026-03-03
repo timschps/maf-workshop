@@ -41,21 +41,12 @@ Use **group chat** when agents should collaborate through shared conversation:
 
 ## Architecture
 
-```
-                    ┌──────────────────────────┐
-                    │   Group Chat Manager     │
-                    │   (Round-Robin / Custom)  │
-                    └────────┬─────────────────┘
-                             │ selects next speaker
-                ┌────────────┼────────────────┐
-                │            │                │
-                ▼            ▼                ▼
-          ┌──────────┐ ┌──────────┐    ┌──────────┐
-          │  Writer  │ │ Reviewer │    │   ...    │
-          └──────────┘ └──────────┘    └──────────┘
-                │            │
-                └────────────┘
-                  shared history
+```mermaid
+graph TD
+    Manager["Group Chat Manager<br/>(Round-Robin / Custom)"] -->|"selects next speaker"| Writer["Writer"]
+    Manager --> Reviewer["Reviewer"]
+    Manager --> More["..."]
+    Writer <-->|"shared history"| Reviewer
 ```
 
 ---

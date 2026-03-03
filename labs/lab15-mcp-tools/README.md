@@ -42,24 +42,15 @@ Use **MCP tools** when your agent needs capabilities from external providers wit
 
 ## Conceptual Overview
 
-```
-  MCP (Model Context Protocol) — dynamic tool discovery:
+```mermaid
+graph LR
+    Agent["Agent<br/>'What tools do you have?'"]
+    MCP["MCP Server<br/>get_products<br/>search_inventory<br/>check_price"]
 
-  ┌──────────────┐          ┌─────────────────────────────┐
-  │  Agent       │          │  MCP Server (remote)        │
-  │              │          │                             │
-  │  "What tools │──GET────▶│  tools/list                 │
-  │   do you     │          │  → get_products()           │
-  │   have?"     │◀─────────│  → search_inventory()       │
-  │              │          │  → check_price()            │
-  │              │          └─────────────────────────────┘
-  │  Now uses    │                       │
-  │  them like   │──POST tools/call─────▶│
-  │  local tools │◀── result ────────────│
-  └──────────────┘
-
-  The agent doesn't know the tools at compile time —
-  it discovers them from the MCP server at runtime!
+    Agent -->|"tools/list"| MCP
+    MCP -->|"discovered tools"| Agent
+    Agent -->|"tools/call"| MCP
+    MCP -->|"result"| Agent
 ```
 
 ---

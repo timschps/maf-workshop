@@ -19,26 +19,23 @@
 
 ## Conceptual Overview
 
-```
-                         ┌─────────────────────────────────────────┐
-                         │  Agent (LLM)                            │
-  "What's the weather    │                                         │
-   and time in Tokyo?"   │  Reads tool descriptions, decides:      │
-  ──────────────────────▶│  → Need get_weather("Tokyo")            │
-                         │  → Need get_time("JST")                 │
-                         │                                         │
-                         │  Combines both results into one answer   │
-                         └───────┬─────────────────┬───────────────┘
-                                 │                 │
-                        ┌────────┘                 └────────┐
-                        ▼                                   ▼
-                ┌───────────────┐                  ┌───────────────┐
-                │ get_weather() │                  │  get_time()   │
-                │               │                  │               │
-                │ "22°C, sunny" │                  │ "14:30 JST"   │
-                └───────────────┘                  └───────────────┘
+```mermaid
+graph TD
+  User["'What's the weather<br/>and time in Tokyo?'"]
+  Agent["Agent (LLM)<br/>Reads tool descriptions, decides:<br/>→ Need get_weather('Tokyo')<br/>→ Need get_time('JST')<br/>Combines both results into one answer"]
+  Weather["get_weather()<br/>'22°C, sunny'"]
+  Time["get_time()<br/>'14:30 JST'"]
+  Answer["Combined answer<br/><i>The LLM picks the right tool(s) —<br/>one or many — based on the question.</i>"]
 
-  The LLM picks the right tool(s) — one or many — based on the question.
+  User --> Agent
+  Agent --> Weather
+  Agent --> Time
+  Weather --> Agent
+  Time --> Agent
+  Agent --> Answer
+
+  style Weather fill:#e3f2fd,stroke:#1565c0
+  style Time fill:#fce4ec,stroke:#c62828
 ```
 
 ---

@@ -42,22 +42,18 @@ Exposing your agent as an MCP server is the right choice when:
 
 ## Conceptual Overview
 
-```
-  Flip the script: your agent IS the MCP server
-
-  ┌──────────────────────┐          ┌──────────────────────────┐
-  │  MCP Client          │          │  Your MCP Server         │
-  │                      │          │                          │
-  │  VS Code Copilot     │──stdio──▶│  tools/list              │
-  │  MCP Inspector       │          │  → ask_joke_agent()      │
-  │  Any MCP client      │          │                          │
-  │                      │          │  tools/call              │
-  │  "Tell me a joke     │──────────▶  → runs your Agent      │
-  │   about cats"        │          │    → LLM generates joke  │
-  │                      │◀─────────│  → returns result        │
-  └──────────────────────┘          └──────────────────────────┘
-
-  Your MAF agent becomes a tool for external MCP clients!
+```mermaid
+graph LR
+    subgraph clients["MCP Client"]
+        C["VS Code Copilot<br/>MCP Inspector<br/>Any MCP client"]
+    end
+    subgraph server["Your MCP Server"]
+        List["tools/list → ask_joke_agent"]
+        Call["tools/call → runs your Agent<br/>→ LLM generates joke<br/>→ returns result"]
+    end
+    C -->|stdio| List
+    C -->|"'Tell me a joke about cats'"| Call
+    Call -->|result| C
 ```
 
 ---
@@ -73,12 +69,12 @@ Choose your language:
 
 ## How It Works
 
-```
-┌─────────────┐     stdio      ┌──────────────────┐     LLM API     ┌─────────────┐
-│  MCP Client  │ ──────────────▶│  MCP Server       │ ──────────────▶│ Azure OpenAI │
-│  (VS Code,   │ ◀──────────────│  (Your Agent)     │ ◀──────────────│              │
-│   Inspector) │                └──────────────────┘                 └─────────────┘
-└─────────────┘
+```mermaid
+graph LR
+    Client["MCP Client<br/>VS Code, Inspector"] -->|stdio| Server["MCP Server<br/>Your Agent"]
+    Server -->|stdio| Client
+    Server -->|LLM API| LLM["Azure OpenAI"]
+    LLM --> Server
 ```
 
 1. An MCP client connects to your server via stdio

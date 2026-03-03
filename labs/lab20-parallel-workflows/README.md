@@ -40,20 +40,21 @@ Use **concurrent workflows** when independent tasks can run in parallel for spee
 
 ## Architecture
 
-```
-                  ┌─────────────────────────┐
-                  │   HistoryResearcher      │──┐
-                  └─────────────────────────┘  │
-                                                │
-Topic Input ──▶   ┌─────────────────────────┐  ├──▶ Merge Function ──▶ Combined Report
-                  │   CultureResearcher      │──┤
-                  └─────────────────────────┘  │
-                                                │
-                  ┌─────────────────────────┐  │
-                  │   TravelTipsResearcher   │──┘
-                  └─────────────────────────┘
+```mermaid
+graph LR
+    Input["Topic Input"] --> History["HistoryResearcher"]
+    Input --> Culture["CultureResearcher"]
+    Input --> Travel["TravelTipsResearcher"]
+    History --> Merge["Merge Function"]
+    Culture --> Merge
+    Travel --> Merge
+    Merge --> Output["Combined Report"]
 
-              ◀──── Concurrent ────▶  ◀── Merge ──▶
+    subgraph Concurrent
+        History
+        Culture
+        Travel
+    end
 ```
 
 ---
@@ -87,11 +88,21 @@ Choose your language:
 
 Concurrent execution significantly reduces total time. Instead of running three researchers sequentially (~9 seconds), they run in parallel (~3 seconds):
 
-```
-Sequential:  [History: 3s] → [Culture: 3s] → [Travel: 3s] = ~9s total
-Concurrent:  [History: 3s]
-             [Culture: 3s]  = ~3s total
-             [Travel: 3s]
+```mermaid
+gantt
+    title Execution Time Comparison
+    dateFormat s
+    axisFormat %S s
+
+    section Sequential (~9s)
+        History  :seq1, 0, 3s
+        Culture  :seq2, after seq1, 3s
+        Travel   :seq3, after seq2, 3s
+
+    section Concurrent (~3s)
+        History  :con1, 0, 3s
+        Culture  :con2, 0, 3s
+        Travel   :con3, 0, 3s
 ```
 
 ---

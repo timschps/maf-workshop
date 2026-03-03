@@ -34,31 +34,22 @@ Use **context providers** when the agent needs dynamic information injected at r
 
 ## Conceptual Overview
 
-```
-  Session history stores conversation;
-  Context providers inject external knowledge before every run:
+```mermaid
+graph LR
+  subgraph AgentRun["Agent Run"]
+    CP1["Context Provider<br/>'Today is Monday,<br/>User prefers metric units'"]
+    CP2["Another Provider<br/>'Company policy:<br/>no discounts over 20%'"]
+    Agent["Agent<br/>System prompt +<br/>context + user message"]
 
-  ┌──────────────────────────────────────────────────────────┐
-  │  Agent Run                                               │
-  │                                                          │
-  │  ┌─────────────────┐   injected before    ┌───────────┐ │
-  │  │ Context Provider │──────each run───────▶│           │ │
-  │  │                  │                      │   Agent   │ │
-  │  │ "Today is Monday │                      │           │ │
-  │  │  User prefers    │                      │  System   │ │
-  │  │  metric units"   │                      │  prompt + │ │
-  │  └─────────────────┘                       │  context  │ │
-  │                                            │  + user   │ │
-  │  ┌─────────────────┐                       │  message  │ │
-  │  │ Another Provider │─────────────────────▶│           │ │
-  │  │                  │                      └───────────┘ │
-  │  │ "Company policy: │                                    │
-  │  │  no discounts    │                                    │
-  │  │  over 20%"       │                                    │
-  │  └─────────────────┘                                     │
-  └──────────────────────────────────────────────────────────┘
+    CP1 -- "injected before<br/>each run" --> Agent
+    CP2 -- "injected before<br/>each run" --> Agent
+  end
 
-  Context providers add dynamic knowledge the LLM doesn't have.
+  Note["Context providers add dynamic<br/>knowledge the LLM doesn't have."]
+
+  style CP1 fill:#e3f2fd,stroke:#1565c0
+  style CP2 fill:#e3f2fd,stroke:#1565c0
+  style Agent fill:#e8f5e9,stroke:#2e7d32
 ```
 
 ---

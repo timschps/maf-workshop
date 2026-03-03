@@ -41,12 +41,12 @@ Use an **A2A client** when your agent needs to call a remote agent over the netw
 
 ## Architecture
 
-```
-┌──────────────┐     HTTP/A2A      ┌──────────────────┐     LLM API     ┌─────────────┐
-│  A2A Client   │ ────────────────▶│  A2A Server        │ ──────────────▶│ Azure OpenAI │
-│  (proxy)      │ ◀────────────────│  (Hosted Agent)    │ ◀──────────────│              │
-│               │   JSON-RPC       └──────────────────┘                 └─────────────┘
-└──────────────┘
+```mermaid
+graph LR
+    Client["A2A Client<br/>(proxy)"] -->|"HTTP/A2A<br/>JSON-RPC"| Server["A2A Server<br/>(Hosted Agent)"]
+    Server -->|"LLM API"| LLM["Azure OpenAI"]
+    Server -.->|response| Client
+    LLM -.->|response| Server
 ```
 
 ---

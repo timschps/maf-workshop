@@ -18,28 +18,21 @@
 
 ## Conceptual Overview
 
-```
-  Same LLM, different instructions → completely different behavior:
+```mermaid
+graph LR
+  Q["'What should I<br/>visit in Paris?'"]
 
-  ┌──────────────────┐      ┌────────────┐      ┌──────────────────────┐
-  │  "What should I  │─────▶│            │─────▶│ "Arrr! Ye must sail  │
-  │   visit in       │      │  🏴‍☠️ Pirate  │      │  to the Eiffel Tower │
-  │   Paris?"        │      │  Agent     │      │  matey!"             │
-  └──────────────────┘      └────────────┘      └──────────────────────┘
+  Q --> Pirate["🏴‍☠️ Pirate Agent"]
+  Q --> Poet["📜 Poet Agent"]
+  Q --> Expert["🗺️ Expert Agent"]
 
-  ┌──────────────────┐      ┌────────────┐      ┌──────────────────────┐
-  │  "What should I  │─────▶│            │─────▶│ "O Paris! City of   │
-  │   visit in       │      │  📜 Poet    │      │  light and love,     │
-  │   Paris?"        │      │  Agent     │      │  thy towers..."      │
-  └──────────────────┘      └────────────┘      └──────────────────────┘
+  Pirate --> R1["'Arrr! Ye must sail<br/>to the Eiffel Tower, matey!'"]
+  Poet --> R2["'O Paris! City of<br/>light and love, thy towers...'"]
+  Expert --> R3["'1. Eiffel Tower<br/>2. Louvre Museum<br/>3. Notre-Dame...'"]
 
-  ┌──────────────────┐      ┌────────────┐      ┌──────────────────────┐
-  │  "What should I  │─────▶│            │─────▶│ "1. Eiffel Tower     │
-  │   visit in       │      │  🗺️ Expert  │      │  2. Louvre Museum    │
-  │   Paris?"        │      │  Agent     │      │  3. Notre-Dame..."   │
-  └──────────────────┘      └────────────┘      └──────────────────────┘
-
-  The only difference: the system instructions (persona).
+  style Pirate fill:#fff3e0,stroke:#e65100
+  style Poet fill:#f3e5f5,stroke:#6a1b9a
+  style Expert fill:#e8f5e9,stroke:#2e7d32
 ```
 
 ---

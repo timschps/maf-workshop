@@ -34,22 +34,9 @@ Use **agent workflows** when each step in your pipeline benefits from LLM reason
 
 ## Conceptual Overview
 
-```
-  Sequential agent pipeline — each agent's output becomes the next one's input:
-
-  ┌──────────────┐     ┌──────────────┐     ┌──────────────┐
-  │  Researcher  │────▶│  Writer      │────▶│  Editor      │
-  │              │     │              │     │              │
-  │  "Find 3-5  │     │  "Write a    │     │  "Polish,    │
-  │   key facts │     │   short      │     │   fix grammar│
-  │   about..." │     │   article"   │     │   add title" │
-  │              │     │              │     │              │
-  │  Output:     │     │  Output:     │     │  Output:     │
-  │  Raw facts   │     │  Draft       │     │  Final       │
-  │  & data      │──▶  │  article     │──▶  │  article     │
-  └──────────────┘     └──────────────┘     └──────────────┘
-
-  SequentialBuilder(participants: [researcher, writer, editor]).Build()
+```mermaid
+graph LR
+    R["Researcher<br/>'Find 3-5 key facts about...'<br/>Output: Raw facts & data"] -->|output → input| W["Writer<br/>'Write a short article'<br/>Output: Draft article"] -->|output → input| E["Editor<br/>'Polish, fix grammar, add title'<br/>Output: Final article"]
 ```
 
 ---

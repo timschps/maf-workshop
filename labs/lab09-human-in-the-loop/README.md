@@ -36,30 +36,13 @@ Use **human-in-the-loop** when certain agent actions are too risky to execute au
 
 ## Conceptual Overview
 
-```
-  Agent wants to call a sensitive tool → middleware intercepts:
-
-  ┌──────────┐     ┌───────────┐     ┌──────────────────┐
-  │  User     │────▶│  Agent    │────▶│  LLM decides:    │
-  │  "Send an │     │           │     │  call send_email  │
-  │   email"  │     └───────────┘     └────────┬─────────┘
-  └──────────┘                                 │
-                                               ▼
-                                ┌──────────────────────────┐
-                                │  Approval Middleware      │
-                                │                          │
-                                │  ⚠️  "Agent wants to call │
-                                │   send_email(to=bob,     │
-                                │   subject=Hello)"        │
-                                │                          │
-                                │  [Approve] or [Reject]?  │
-                                └─────────┬────────────────┘
-                                          │
-                           ┌──────────────┼──────────────┐
-                           ▼                             ▼
-                    ✅ Approved                    ❌ Rejected
-                    → execute tool                 → skip tool
-                    → agent continues              → agent told "denied"
+```mermaid
+graph TD
+    User["User<br/>'Send an email'"] --> Agent[Agent]
+    Agent --> LLM["LLM decides:<br/>call send_email"]
+    LLM --> MW["⚠️ Approval Middleware<br/>send_email — to=bob, subject=Hello<br/>Approve or Reject?"]
+    MW -->|Approved| OK["✅ Execute tool<br/>Agent continues"]
+    MW -->|Rejected| NO["❌ Skip tool<br/>Agent told 'denied'"]
 ```
 
 ---
