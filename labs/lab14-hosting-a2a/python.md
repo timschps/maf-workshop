@@ -234,3 +234,56 @@ python client.py
 ```
 
 This demonstrates the core A2A pattern: agents communicating over HTTP using a standard protocol.
+
+### Exercise D: Consume A2A Server with a MAF Agent
+
+Instead of just calling the A2A agent directly, wire it as a **tool inside another MAF agent** — so the orchestrator delegates to the remote agent automatically.
+
+Create a file `orchestrator.py`:
+
+```python
+import asyncio
+
+from agent_framework.a2a import A2AAgent
+from agent_framework.azure import AzureOpenAIChatClient
+from azure.identity import AzureCliCredential
+
+
+async def main():
+    print("🌍 Trip Planner (using remote Travel Assistant via A2A)\n")
+
+    # ── Create an A2A proxy to the hosted Travel Assistant ────────────────────
+    async with A2AAgent(name="TravelProxy", url="http://localhost:8088") as travel_proxy:
+
+        # ── Create an orchestrator agent that uses the A2A agent as a tool ────
+        client = AzureOpenAIChatClient(credential=AzureCliCredential())
+        orchestrator = client.as_agent(
+            name="TripPlanner",
+            instructions=(
+                "You are a trip planning assistant. Use the TravelProxy tool to get "
+                "weather and time information for destinations. Combine the information "
+                "into a helpful travel summary for the user."
+            ),
+            tools=[travel_proxy.as_tool()],
+        )
+
+        # ── Test: the orchestrator delegates to the remote agent via A2A ──────
+        print("📤 Asking: 'Plan a trip to Tokyo — what's the weather and time there?'\n")
+        result = await orchestrator.run(
+            "Plan a trip to Tokyo — what's the weather and time there?"
+        )
+        print(f"📥 Response:\n{result}\n")
+
+    print("✅ MAF agent consumed A2A server as a tool!")
+
+
+asyncio.run(main())
+```
+
+Run it while the Lab 14 server is still running:
+
+```bash
+python orchestrator.py
+```
+
+**Key insight:** `travel_proxy.as_tool()` wraps the remote A2A agent as a regular MAF tool — the orchestrator doesn't know it's calling a remote service over HTTP. This is the same pattern used in Lab 17, but here you can see both sides (server + client) in one lab.

@@ -177,3 +177,73 @@ var response = await client.PostAsJsonAsync(
 var body = await response.Content.ReadAsStringAsync();
 Console.WriteLine(body);
 ```
+
+### Exercise D: Consume A2A Server with a MAF Agent
+
+Instead of raw HTTP, use MAF's built-in `A2AAgent` to call your hosted agent — and wire it as a tool into another orchestrating agent.
+
+Create a separate console app:
+
+```bash
+dotnet new console -n Lab14_A2AClient
+cd Lab14_A2AClient
+dotnet add package Azure.AI.OpenAI --prerelease
+dotnet add package Azure.Identity
+dotnet add package Microsoft.Agents.AI.OpenAI --prerelease
+dotnet add package Microsoft.Agents.AI.A2A --prerelease
+```
+
+Replace `Program.cs`:
+
+```csharp
+using System;
+using System.Net.Http;
+using A2A;
+using Azure.AI.OpenAI;
+using Azure.Identity;
+using Microsoft.Agents.AI;
+using Microsoft.Agents.AI.A2A;
+using Microsoft.Extensions.AI;
+using OpenAI.Chat;
+
+#pragma warning disable MEAI001
+
+var endpoint = Environment.GetEnvironmentVariable("AZURE_OPENAI_ENDPOINT")
+    ?? throw new InvalidOperationException("Set AZURE_OPENAI_ENDPOINT");
+var deploymentName = Environment.GetEnvironmentVariable("AZURE_OPENAI_DEPLOYMENT_NAME") ?? "gpt-4o-mini";
+
+// ── Create an A2A proxy to the hosted Travel Assistant ───────────────────────
+using var httpClient = new HttpClient { Timeout = TimeSpan.FromSeconds(60) };
+var a2aClient = new A2AClient(new Uri("http://localhost:5100/a2a/travel-assistant"), httpClient);
+var travelProxy = new A2AAgent(a2aClient, "TravelProxy", "Gets weather and time info for travel destinations");
+
+// ── Create an orchestrator agent that uses the A2A agent as a tool ───────────
+AIAgent orchestrator = new AzureOpenAIClient(new Uri(endpoint), new AzureCliCredential())
+    .GetChatClient(deploymentName)
+    .AsAIAgent(
+        name: "TripPlanner",
+        instructions: """
+            You are a trip planning assistant. Use the TravelProxy tool to get
+            weather and time information for destinations. Combine the information
+            into a helpful travel summary for the user.
+            """,
+        tools: [travelProxy.AsAIFunction()]);
+
+// ── Test: the orchestrator delegates to the remote agent via A2A ─────────────
+Console.WriteLine("🌍 Trip Planner (using remote Travel Assistant via A2A)\n");
+
+Console.WriteLine("📤 Asking: 'Plan a trip to Tokyo — what's the weather and time there?'\n");
+var result = await orchestrator.RunAsync(
+    "Plan a trip to Tokyo — what's the weather and time there?");
+Console.WriteLine($"📥 Response:\n{result}\n");
+
+Console.WriteLine("✅ MAF agent consumed A2A server as a tool!");
+```
+
+Run it while the Lab 14 server is still running:
+
+```bash
+dotnet run
+```
+
+**Key insight:** The `A2AAgent.AsAIFunction()` call wraps the remote A2A agent as a regular MAF tool — the orchestrator doesn't know it's calling a remote service over HTTP. This is the same pattern used in Lab 17, but here you can see both sides (server + client) in one lab.
