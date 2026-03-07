@@ -56,7 +56,7 @@ Tips for the workshop facilitators on delivery, timing, and common pitfalls.
 - **Team formation:** If people don't know each other, do a quick icebreaker
   or assign teams based on skill mix (ideally each team has someone who
   completed all the labs comfortably).
-- **Starter code:** Prepare integration points in the partner app ahead of time:
+- **Starter code:** Prepare integration points in the existing app ahead of time:
   - A service interface where an agent can be plugged in
   - A chat endpoint/UI component ready to wire up
   - Sample data the agent tools can query

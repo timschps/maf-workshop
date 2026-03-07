@@ -370,7 +370,7 @@ public class MultiAgentService
 
 ## Wiring Tools to Your Existing Services
 
-The key to the hackathon is connecting MAF tools to the partner app's **existing services**. Here's the pattern:
+The key to the hackathon is connecting MAF tools to the existing app's **existing services**. Here's the pattern:
 
 ```csharp
 // ── Pattern: Wrap an existing service as a tool ──────────────────────────────
@@ -431,7 +431,7 @@ var agent = factory.CreateAgent(
 
 ## Adding a Simple Chat UI
 
-If the partner app has a web frontend, here's a minimal chat component:
+If the existing app has a web frontend, here's a minimal chat component:
 
 ```html
 <!-- chat-widget.html — add to your existing page -->

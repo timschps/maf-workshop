@@ -306,18 +306,18 @@ Below are suggested slide-by-slide outlines for each section. Each slide has a *
 ## 05 — Hackathon Briefing (13:30 – 13:45)
 
 ### Slide 35: Hackathon Time!
-- **Title:** 🏗️ Hackathon: Transform the Partner App
+- **Title:** 🏗️ Hackathon: Transform the Existing App
 - **Content:** Big visual + excitement
 - **Notes:** Energy transition — shift from learning to building
 
-### Slide 36: The Partner Application
+### Slide 36: The Existing Application
 - **Title:** Meet [App Name]
 - **Content:** Screenshots/demo of the existing application
 - **Notes:** CUSTOMIZE THIS — walk through the app live, show the user journeys
 
 ### Slide 37: The Challenge
 - **Title:** Add an Agentic Experience
-- **Content:** Scenario cards (customize for partner app):
+- **Content:** Scenario cards (customize for existing app):
   1. 💬 Conversational Assistant
   2. ⚙️ Process Automation
   3. 🔍 Smart Search & Insights

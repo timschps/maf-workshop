@@ -305,7 +305,7 @@ Always synthesize the specialists' responses into a cohesive answer.""",
 
 ## Wiring Tools to Your Existing Services
 
-The key to the hackathon is connecting MAF tools to the partner app's **existing services**. Here's the pattern:
+The key to the hackathon is connecting MAF tools to the existing app's **existing services**. Here's the pattern:
 
 ```python
 # ── Pattern: Wrap an existing service as a tool ──────────────────────────────
@@ -354,7 +354,7 @@ agent = factory.create_agent(
 
 ## Adding a Simple Chat UI
 
-If the partner app has a web frontend, here's a minimal chat component:
+If the existing app has a web frontend, here's a minimal chat component:
 
 ```html
 <!-- chat-widget.html — add to your existing page -->

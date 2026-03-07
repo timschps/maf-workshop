@@ -38,11 +38,11 @@ Score each team on a 1–5 scale per category. Total possible: 25 points.
 
 | Score | Criteria |
 |-------|----------|
-| 5 | Seamlessly integrated into the partner app; feels like a native feature |
+| 5 | Seamlessly integrated into the existing app; feels like a native feature |
 | 4 | Well-integrated; clearly connects to existing app services |
 | 3 | Connected to the app but feels like a bolt-on |
 | 2 | Loosely connected; mostly standalone |
-| 1 | Not integrated with the partner app |
+| 1 | Not integrated with the existing app |
 
 ## Category 5: Presentation & Teamwork (1–5)
 
