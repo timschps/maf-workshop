@@ -93,6 +93,6 @@ export AZURE_OPENAI_CHAT_DEPLOYMENT_NAME="gpt-4o-mini"
 
 ## Hackathon-Specific Prerequisites
 
-- [ ] Access to the **partner application repository** (link will be shared)
-- [ ] Ability to clone and build the partner app locally
-- [ ] Read through the partner app README before the workshop
+- [ ] Access to the **existing application repository** (link will be shared)
+- [ ] Ability to clone and build the existing app locally
+- [ ] Read through the existing app README before the workshop

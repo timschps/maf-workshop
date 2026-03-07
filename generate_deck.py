@@ -233,7 +233,7 @@ items = [
     "12:00 – 12:45   🍽️ Lunch",
     "12:45 – 13:30   Module 4 — Workflows & Multi-Agent Patterns  [Theory + Lab]",
     "13:30 – 13:45   Hackathon Briefing",
-    "14:00 – 16:30   🏗️ Hackathon: Add Agentic AI to the Partner App",
+    "14:00 – 16:30   🏗️ Hackathon: Add Agentic AI to the Existing App",
     "16:30 – 17:00   Show & Tell + Wrap-up",
 ]
 add_bullet_slide(slide, items, Inches(0.6), Inches(1.5), Inches(12), Inches(5.5),
@@ -1036,19 +1036,19 @@ add_notes(slide, "If short on time, do the function workflow as guided walkthrou
 # ══════════════════════════════════════════════════════════════════════════════
 # HACKATHON SECTION DIVIDER
 # ══════════════════════════════════════════════════════════════════════════════
-section_title_slide("Part 2", "🏗️  Hackathon\nTransform the Partner App", "13:30 – 17:00", ACCENT_ORANGE)
+section_title_slide("Part 2", "🏗️  Hackathon\nTransform the Existing App", "13:30 – 17:00", ACCENT_ORANGE)
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# SLIDE 36: Partner App (placeholder)
+# SLIDE 36: Existing App (placeholder)
 # ══════════════════════════════════════════════════════════════════════════════
-slide = content_slide("Meet [Partner App Name]", "CUSTOMIZE: Add screenshots and demo the existing application")
+slide = content_slide("Meet [Existing App Name]", "CUSTOMIZE: Add screenshots and demo the existing application")
 add_text_box(slide, Inches(2), Inches(3), Inches(9), Inches(2),
-             "[ Insert partner app screenshots here ]\n\n"
+             "[ Insert existing app screenshots here ]\n\n"
              "Walk through the current functionality, user journeys,\n"
              "and pain points that agents could address.",
              font_size=20, color=MED_GRAY, align=PP_ALIGN.CENTER)
-add_notes(slide, "CUSTOMIZE THIS SLIDE. Walk through the partner app live. Show the user journeys. Identify where agents add value.")
+add_notes(slide, "CUSTOMIZE THIS SLIDE. Walk through the existing app live. Show the user journeys. Identify where agents add value.")
 
 
 # ══════════════════════════════════════════════════════════════════════════════

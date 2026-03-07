@@ -20,7 +20,7 @@
 | 12:45 – 13:30 | Module 4 — Workflows, Hosting & Ops (Labs 10–14) | Theory+Lab |
 | 13:30 – 13:45 | Hackathon Briefing                             | Briefing    |
 | 13:45 – 14:00 | ☕ Break                                        |             |
-| 14:00 – 16:30 | Hackathon: Add Agentic Experience to Partner App| Hack        |
+| 14:00 – 16:30 | Hackathon: Add Agentic Experience to Existing App| Hack        |
 | 16:30 – 17:00 | Show & Tell + Wrap-up                          | Presentation|
 
 ## Lab Overview (21 Labs)
@@ -377,7 +377,7 @@ graph LR
 
 ### 🟠 Hackathon Briefing (13:30 – 13:45)
 
-**Goal:** Introduce the partner application and the hackathon challenge.
+**Goal:** Introduce the existing application and the hackathon challenge.
 
 ```mermaid
 graph LR
@@ -395,7 +395,7 @@ graph LR
 
 **Content:**
 
-1. **Demo the existing partner application**
+1. **Demo the existing application**
    - Walk through the current functionality
    - Identify the user journeys / pain points to enhance
 
@@ -403,7 +403,7 @@ graph LR
    - Define 2–3 specific scenarios where agents add value (examples below)
    - Teams can choose which scenario(s) to tackle
 
-3. **Suggested scenarios** (customize for the partner app):
+3. **Suggested scenarios** (customize for the existing app):
 
    | Scenario | Description | MAF Concepts |
    |----------|-------------|--------------|
@@ -414,7 +414,7 @@ graph LR
 
 4. **Hackathon rules & logistics:**
    - Teams of 3–5 people
-   - Starter code / scaffolding provided (integration points in the partner app)
+   - Starter code / scaffolding provided (integration points in the existing app)
    - Mentors circulating for help
    - 2.5 hours of hacking time
    - 5-minute demo per team at the end
