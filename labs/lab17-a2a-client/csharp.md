@@ -19,7 +19,7 @@ dotnet add package Azure.Identity
 dotnet add package Microsoft.Agents.AI.OpenAI
 dotnet add package Microsoft.Extensions.AI
 dotnet add package Microsoft.Extensions.AI.OpenAI
-dotnet add package Microsoft.Agents.AI.Hosting.A2A.AspNetCore
+dotnet add package Microsoft.Agents.AI.Hosting.A2A.AspNetCore --prerelease
 ```
 
 ### Step 3: Set Environment Variables
@@ -117,7 +117,7 @@ cd Lab17_A2AClient
 ### Step 8: Add Client Packages
 
 ```bash
-dotnet add package Microsoft.Agents.AI.A2A
+dotnet add package Microsoft.Agents.AI.A2A --prerelease
 ```
 
 ### Step 9: Replace Program.cs (Client)

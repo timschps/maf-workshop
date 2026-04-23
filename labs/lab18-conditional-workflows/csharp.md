@@ -37,6 +37,7 @@ export AZURE_OPENAI_DEPLOYMENT_NAME="gpt-4o-mini"
 Replace the contents of `Program.cs` with:
 
 ```csharp
+#pragma warning disable MAAIW001 // Handoff workflows are experimental
 using System;
 using System.Collections.Generic;
 using System.Linq;

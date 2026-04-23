@@ -16,7 +16,7 @@ dotnet add package Azure.AI.OpenAI
 dotnet add package Azure.Identity
 dotnet add package Microsoft.Agents.AI.OpenAI
 dotnet add package Microsoft.Agents.AI.Workflows
-dotnet add package Microsoft.Agents.AI.Hosting.A2A.AspNetCore
+dotnet add package Microsoft.Agents.AI.Hosting.A2A.AspNetCore --prerelease
 dotnet add package Microsoft.Extensions.AI
 dotnet add package Microsoft.Extensions.AI.OpenAI
 ```

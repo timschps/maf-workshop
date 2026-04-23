@@ -10,7 +10,7 @@ cd Lab14_HostedAgent
 dotnet add package Azure.AI.OpenAI
 dotnet add package Azure.Identity
 dotnet add package Microsoft.Agents.AI.OpenAI
-dotnet add package Microsoft.Agents.AI.Hosting.A2A.AspNetCore
+dotnet add package Microsoft.Agents.AI.Hosting.A2A.AspNetCore --prerelease
 ```
 
 ## Step 2: Set Environment Variables
@@ -190,7 +190,7 @@ cd Lab14_A2AClient
 dotnet add package Azure.AI.OpenAI
 dotnet add package Azure.Identity
 dotnet add package Microsoft.Agents.AI.OpenAI
-dotnet add package Microsoft.Agents.AI.A2A
+dotnet add package Microsoft.Agents.AI.A2A --prerelease
 ```
 
 Replace `Program.cs`:
