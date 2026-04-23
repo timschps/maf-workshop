@@ -27,11 +27,11 @@ pip install agent-framework-a2a --pre
 ```bash
 # Windows PowerShell
 $env:AZURE_OPENAI_ENDPOINT = "https://your-resource.openai.azure.com/"
-$env:AZURE_OPENAI_CHAT_DEPLOYMENT_NAME = "gpt-4o-mini"
+$env:AZURE_OPENAI_MODEL = "gpt-4o-mini"
 
 # Bash / macOS / Linux
 export AZURE_OPENAI_ENDPOINT="https://your-resource.openai.azure.com/"
-export AZURE_OPENAI_CHAT_DEPLOYMENT_NAME="gpt-4o-mini"
+export AZURE_OPENAI_MODEL="gpt-4o-mini"
 ```
 
 ## Step 4: Write the Code
@@ -43,7 +43,7 @@ import uuid
 
 import uvicorn
 from agent_framework import Agent
-from agent_framework.azure import AzureOpenAIChatClient
+from agent_framework.openai import OpenAIChatCompletionClient
 from agent_framework.orchestrations import SequentialBuilder
 from azure.identity import AzureCliCredential
 
@@ -63,7 +63,7 @@ from a2a.types import (
 )
 
 # ── Create the chat client ────────────────────────────────────────────────────
-client = AzureOpenAIChatClient(credential=AzureCliCredential())
+client = OpenAIChatCompletionClient(credential=AzureCliCredential())
 
 # ── Register individual agents ────────────────────────────────────────────────
 researcher = Agent(

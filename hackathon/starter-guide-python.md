@@ -31,7 +31,7 @@ class AgentFactory:
         self._endpoint = os.environ.get("AZURE_OPENAI_ENDPOINT")
         if not self._endpoint:
             raise ValueError("Set AZURE_OPENAI_ENDPOINT")
-        self._deployment = os.environ.get("AZURE_OPENAI_CHAT_DEPLOYMENT_NAME", "gpt-4o-mini")
+        self._deployment = os.environ.get("AZURE_OPENAI_MODEL", "gpt-4o-mini")
 
     def _get_client(self):
         credential = AzureCliCredential()
@@ -432,7 +432,7 @@ async function sendMessage() {
 | Tool decorator | `[Description("...")]` attribute | `@tool` decorator |
 | Agent-as-Tool | `agent.AsAIFunction()` | `agent.as_tool()` |
 | Workflow | `AgentWorkflowBuilder` | `SequentialWorkflow(agents=[...])` |
-| Env var for model | `AZURE_OPENAI_DEPLOYMENT_NAME` | `AZURE_OPENAI_CHAT_DEPLOYMENT_NAME` |
+| Env var for model | `AZURE_OPENAI_DEPLOYMENT_NAME` | `AZURE_OPENAI_MODEL` |
 | Session | `agent.CreateSessionAsync()` | `agent.run(msg, history=history)` |
 | DI framework | `builder.Services.AddSingleton<>()` | Manual / FastAPI `Depends()` |
 | Async | `async Task<T>` | `async def` / `await` |

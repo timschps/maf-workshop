@@ -29,11 +29,11 @@ pip install agent-framework-a2a --pre
 ```bash
 # Windows PowerShell
 $env:AZURE_OPENAI_ENDPOINT = "https://your-resource.openai.azure.com/"
-$env:AZURE_OPENAI_CHAT_DEPLOYMENT_NAME = "gpt-4o-mini"
+$env:AZURE_OPENAI_MODEL = "gpt-4o-mini"
 
 # Bash / macOS / Linux
 export AZURE_OPENAI_ENDPOINT="https://your-resource.openai.azure.com/"
-export AZURE_OPENAI_CHAT_DEPLOYMENT_NAME="gpt-4o-mini"
+export AZURE_OPENAI_MODEL="gpt-4o-mini"
 ```
 
 ### Step 4: Write the Server Code
@@ -44,7 +44,7 @@ Create a file named `server.py`:
 import uuid
 
 import uvicorn
-from agent_framework.azure import AzureOpenAIChatClient
+from agent_framework.openai import OpenAIChatCompletionClient
 from azure.identity import AzureCliCredential
 
 from a2a.server.apps import A2AStarletteApplication
@@ -63,7 +63,7 @@ from a2a.types import (
 )
 
 # ── Create the agent ──────────────────────────────────────────────────────────
-client = AzureOpenAIChatClient(credential=AzureCliCredential())
+client = OpenAIChatCompletionClient(credential=AzureCliCredential())
 travel_agent = client.as_agent(
     name="TravelAssistant",
     instructions=(

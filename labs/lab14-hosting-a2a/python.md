@@ -27,11 +27,11 @@ pip install agent-framework-a2a --pre
 ```bash
 # Windows PowerShell
 $env:AZURE_OPENAI_ENDPOINT = "https://your-resource.openai.azure.com/"
-$env:AZURE_OPENAI_CHAT_DEPLOYMENT_NAME = "gpt-4o-mini"
+$env:AZURE_OPENAI_MODEL = "gpt-4o-mini"
 
 # Bash / macOS / Linux
 export AZURE_OPENAI_ENDPOINT="https://your-resource.openai.azure.com/"
-export AZURE_OPENAI_CHAT_DEPLOYMENT_NAME="gpt-4o-mini"
+export AZURE_OPENAI_MODEL="gpt-4o-mini"
 ```
 
 ## Step 4: Build a Hosted Agent API
@@ -52,7 +52,7 @@ from datetime import datetime, timezone
 
 import uvicorn
 from agent_framework import tool
-from agent_framework.azure import AzureOpenAIChatClient
+from agent_framework.openai import OpenAIChatCompletionClient
 from azure.identity import AzureCliCredential
 
 # A2A server imports
@@ -86,7 +86,7 @@ def get_time(tz: str) -> str:
 
 
 # ── Create the agent ─────────────────────────────────────────────────────────
-client = AzureOpenAIChatClient(credential=AzureCliCredential())
+client = OpenAIChatCompletionClient(credential=AzureCliCredential())
 agent = client.as_agent(
     name="TravelAssistant",
     instructions=(
@@ -246,7 +246,7 @@ Create a file `orchestrator.py`:
 import asyncio
 
 from agent_framework.a2a import A2AAgent
-from agent_framework.azure import AzureOpenAIChatClient
+from agent_framework.openai import OpenAIChatCompletionClient
 from azure.identity import AzureCliCredential
 
 
@@ -257,7 +257,7 @@ async def main():
     async with A2AAgent(name="TravelProxy", url="http://localhost:8088") as travel_proxy:
 
         # ── Create an orchestrator agent that uses the A2A agent as a tool ────
-        client = AzureOpenAIChatClient(credential=AzureCliCredential())
+        client = OpenAIChatCompletionClient(credential=AzureCliCredential())
         orchestrator = client.as_agent(
             name="TripPlanner",
             instructions=(

@@ -26,11 +26,11 @@ pip install agent-framework azure-identity mcp
 ```bash
 # Windows PowerShell
 $env:AZURE_OPENAI_ENDPOINT = "https://your-resource.openai.azure.com/"
-$env:AZURE_OPENAI_CHAT_DEPLOYMENT_NAME = "gpt-4o-mini"
+$env:AZURE_OPENAI_MODEL = "gpt-4o-mini"
 
 # Bash / macOS / Linux
 export AZURE_OPENAI_ENDPOINT="https://your-resource.openai.azure.com/"
-export AZURE_OPENAI_CHAT_DEPLOYMENT_NAME="gpt-4o-mini"
+export AZURE_OPENAI_MODEL="gpt-4o-mini"
 ```
 
 ## Step 4: Write the Code
@@ -40,14 +40,14 @@ Create a file named `main.py`:
 ```python
 import asyncio
 import sys
-from agent_framework.azure import AzureOpenAIChatClient
+from agent_framework.openai import OpenAIChatCompletionClient
 from azure.identity import AzureCliCredential
 from mcp.server import Server
 from mcp.server.stdio import stdio_server
 import mcp.types as types
 
 # ── Create the agent ──────────────────────────────────────────────────────────
-client = AzureOpenAIChatClient(credential=AzureCliCredential())
+client = OpenAIChatCompletionClient(credential=AzureCliCredential())
 joke_agent = client.as_agent(
     name="JokeAgent",
     instructions="You are a comedian. Tell short, clever jokes. Keep responses under 100 words.",

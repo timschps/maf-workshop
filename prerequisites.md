@@ -78,10 +78,10 @@ export AZURE_OPENAI_DEPLOYMENT_NAME="gpt-4o-mini"
 
 ```bash
 export AZURE_OPENAI_ENDPOINT="https://your-resource.openai.azure.com/"
-export AZURE_OPENAI_CHAT_DEPLOYMENT_NAME="gpt-4o-mini"
+export AZURE_OPENAI_MODEL="gpt-4o-mini"
 ```
 
-> **⚠️ Important:** C# and Python use **different** environment variable names for the deployment. C# uses `AZURE_OPENAI_DEPLOYMENT_NAME` while Python uses `AZURE_OPENAI_CHAT_DEPLOYMENT_NAME`.
+> **⚠️ Important:** C# and Python use **different** environment variable names for the deployment. C# uses `AZURE_OPENAI_DEPLOYMENT_NAME` while Python uses `AZURE_OPENAI_MODEL`.
 
 > **Note:** MAF does **not** auto-load `.env` files. Use `load_dotenv()` in Python or set variables in your shell/IDE.
 

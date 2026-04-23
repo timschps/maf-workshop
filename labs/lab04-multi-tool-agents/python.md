@@ -26,11 +26,11 @@ pip install agent-framework azure-identity
 ```bash
 # Windows PowerShell
 $env:AZURE_OPENAI_ENDPOINT = "https://your-resource.openai.azure.com/"
-$env:AZURE_OPENAI_CHAT_DEPLOYMENT_NAME = "gpt-4o-mini"
+$env:AZURE_OPENAI_MODEL = "gpt-4o-mini"
 
 # Bash / macOS / Linux
 export AZURE_OPENAI_ENDPOINT="https://your-resource.openai.azure.com/"
-export AZURE_OPENAI_CHAT_DEPLOYMENT_NAME="gpt-4o-mini"
+export AZURE_OPENAI_MODEL="gpt-4o-mini"
 ```
 
 ## Step 4: Define Multiple Tools
@@ -42,7 +42,7 @@ import asyncio
 from typing import Annotated
 from random import randint
 from agent_framework import tool
-from agent_framework.azure import AzureOpenAIChatClient
+from agent_framework.openai import OpenAIChatCompletionClient
 from azure.identity import AzureCliCredential
 from pydantic import Field
 
@@ -93,7 +93,7 @@ def translate(
     return f"[Translated to {target_language}]: «{text}» (simulated translation)"
 
 async def main():
-    client = AzureOpenAIChatClient(credential=AzureCliCredential())
+    client = OpenAIChatCompletionClient(credential=AzureCliCredential())
 
     # ── Create the multi-tool agent ───────────────────────────────────────────
     agent = client.as_agent(

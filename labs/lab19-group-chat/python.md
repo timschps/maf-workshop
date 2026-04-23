@@ -26,11 +26,11 @@ pip install agent-framework azure-identity
 ```bash
 # Windows PowerShell
 $env:AZURE_OPENAI_ENDPOINT = "https://your-resource.openai.azure.com/"
-$env:AZURE_OPENAI_CHAT_DEPLOYMENT_NAME = "gpt-4o-mini"
+$env:AZURE_OPENAI_MODEL = "gpt-4o-mini"
 
 # Bash / macOS / Linux
 export AZURE_OPENAI_ENDPOINT="https://your-resource.openai.azure.com/"
-export AZURE_OPENAI_CHAT_DEPLOYMENT_NAME="gpt-4o-mini"
+export AZURE_OPENAI_MODEL="gpt-4o-mini"
 ```
 
 ## Step 4: Write the Code
@@ -40,7 +40,7 @@ Create a file named `main.py`:
 ```python
 import asyncio
 from agent_framework import Agent, Message
-from agent_framework.azure import AzureOpenAIChatClient
+from agent_framework.openai import OpenAIChatCompletionClient
 from agent_framework.orchestrations import GroupChatBuilder, GroupChatState
 from azure.identity import AzureCliCredential
 
@@ -59,7 +59,7 @@ def round_robin_selector(state: GroupChatState) -> str:
 
 async def main():
     # ── Create the chat client ────────────────────────────────────────────────
-    client = AzureOpenAIChatClient(credential=AzureCliCredential())
+    client = OpenAIChatCompletionClient(credential=AzureCliCredential())
 
     # ══════════════════════════════════════════════════════════════════════════
     #  Scenario 1: Round-Robin Group Chat

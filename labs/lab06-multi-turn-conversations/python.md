@@ -26,11 +26,11 @@ pip install agent-framework azure-identity
 ```bash
 # Windows PowerShell
 $env:AZURE_OPENAI_ENDPOINT = "https://your-resource.openai.azure.com/"
-$env:AZURE_OPENAI_CHAT_DEPLOYMENT_NAME = "gpt-4o-mini"
+$env:AZURE_OPENAI_MODEL = "gpt-4o-mini"
 
 # Bash / macOS / Linux
 export AZURE_OPENAI_ENDPOINT="https://your-resource.openai.azure.com/"
-export AZURE_OPENAI_CHAT_DEPLOYMENT_NAME="gpt-4o-mini"
+export AZURE_OPENAI_MODEL="gpt-4o-mini"
 ```
 
 ## Step 4: Write a Multi-Turn Agent
@@ -42,7 +42,7 @@ import asyncio
 from typing import Annotated
 from random import randint
 from agent_framework import tool
-from agent_framework.azure import AzureOpenAIChatClient
+from agent_framework.openai import OpenAIChatCompletionClient
 from azure.identity import AzureCliCredential
 from pydantic import Field
 
@@ -56,7 +56,7 @@ def get_weather(
     return f"Weather in {location}: {conditions[randint(0, 3)]}, {randint(5, 30)}°C."
 
 async def main():
-    client = AzureOpenAIChatClient(credential=AzureCliCredential())
+    client = OpenAIChatCompletionClient(credential=AzureCliCredential())
 
     # ── Create the agent ──────────────────────────────────────────────────────
     agent = client.as_agent(
@@ -116,11 +116,11 @@ Build an interactive console loop with session:
 
 ```python
 import asyncio
-from agent_framework.azure import AzureOpenAIChatClient
+from agent_framework.openai import OpenAIChatCompletionClient
 from azure.identity import AzureCliCredential
 
 async def main():
-    client = AzureOpenAIChatClient(credential=AzureCliCredential())
+    client = OpenAIChatCompletionClient(credential=AzureCliCredential())
     agent = client.as_agent(
         instructions="You are a friendly travel assistant. Remember the user's name and preferences.",
         name="TravelAssistant",
@@ -151,7 +151,7 @@ Show how session state preserves context:
 
 ```python
 async def main():
-    client = AzureOpenAIChatClient(credential=AzureCliCredential())
+    client = OpenAIChatCompletionClient(credential=AzureCliCredential())
     agent = client.as_agent(
         instructions="You are a helpful assistant. Remember everything the user tells you.",
         name="MemoryAgent",
@@ -176,7 +176,7 @@ Create two separate sessions and show they're independent:
 
 ```python
 async def main():
-    client = AzureOpenAIChatClient(credential=AzureCliCredential())
+    client = OpenAIChatCompletionClient(credential=AzureCliCredential())
     agent = client.as_agent(
         instructions="You are a helpful assistant. Remember the user's name.",
         name="NameAgent",

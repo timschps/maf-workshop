@@ -26,11 +26,11 @@ pip install agent-framework azure-identity opentelemetry-sdk opentelemetry-expor
 ```bash
 # Windows PowerShell
 $env:AZURE_OPENAI_ENDPOINT = "https://your-resource.openai.azure.com/"
-$env:AZURE_OPENAI_CHAT_DEPLOYMENT_NAME = "gpt-4o-mini"
+$env:AZURE_OPENAI_MODEL = "gpt-4o-mini"
 
 # Bash / macOS / Linux
 export AZURE_OPENAI_ENDPOINT="https://your-resource.openai.azure.com/"
-export AZURE_OPENAI_CHAT_DEPLOYMENT_NAME="gpt-4o-mini"
+export AZURE_OPENAI_MODEL="gpt-4o-mini"
 ```
 
 ## Step 4: Add Telemetry to an Agent
@@ -47,7 +47,7 @@ from opentelemetry.sdk.trace.export import ConsoleSpanExporter, SimpleSpanProces
 from opentelemetry.sdk.resources import Resource
 
 from agent_framework import tool
-from agent_framework.azure import AzureOpenAIChatClient
+from agent_framework.openai import OpenAIChatCompletionClient
 from azure.identity import AzureCliCredential
 
 # ── Configure OpenTelemetry to export to console ──────────────────────────────
@@ -65,7 +65,7 @@ def get_weather(city: str) -> str:
 
 
 async def main():
-    client = AzureOpenAIChatClient(credential=AzureCliCredential())
+    client = OpenAIChatCompletionClient(credential=AzureCliCredential())
     agent = client.as_agent(
         name="TelemetryAgent",
         instructions="You are a helpful weather assistant.",

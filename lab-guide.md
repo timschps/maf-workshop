@@ -30,7 +30,7 @@ Make sure you've completed the [prerequisites](./prerequisites.md):
   | Variable | C# | Python |
   |----------|-----|--------|
   | Endpoint | `AZURE_OPENAI_ENDPOINT` | `AZURE_OPENAI_ENDPOINT` |
-  | Deployment | `AZURE_OPENAI_DEPLOYMENT_NAME` | `AZURE_OPENAI_CHAT_DEPLOYMENT_NAME` |
+  | Deployment | `AZURE_OPENAI_DEPLOYMENT_NAME` | `AZURE_OPENAI_MODEL` |
 
   > ⚠️ Note the different deployment variable names between C# and Python!
 

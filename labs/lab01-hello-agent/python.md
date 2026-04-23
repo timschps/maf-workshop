@@ -26,11 +26,11 @@ pip install agent-framework azure-identity
 ```bash
 # Windows PowerShell
 $env:AZURE_OPENAI_ENDPOINT = "https://your-resource.openai.azure.com/"
-$env:AZURE_OPENAI_CHAT_DEPLOYMENT_NAME = "gpt-4o-mini"
+$env:AZURE_OPENAI_MODEL = "gpt-4o-mini"
 
 # Bash / macOS / Linux
 export AZURE_OPENAI_ENDPOINT="https://your-resource.openai.azure.com/"
-export AZURE_OPENAI_CHAT_DEPLOYMENT_NAME="gpt-4o-mini"
+export AZURE_OPENAI_MODEL="gpt-4o-mini"
 ```
 
 ## Step 4: Write the Code
@@ -39,12 +39,12 @@ Create a file named `main.py`:
 
 ```python
 import asyncio
-from agent_framework.azure import AzureOpenAIChatClient
+from agent_framework.openai import OpenAIChatCompletionClient
 from azure.identity import AzureCliCredential
 
 async def main():
     # ── Create the agent ──────────────────────────────────────────────────────
-    client = AzureOpenAIChatClient(credential=AzureCliCredential())
+    client = OpenAIChatCompletionClient(credential=AzureCliCredential())
     agent = client.as_agent(
         name="HelloAgent",
         instructions="You are a friendly assistant. Keep your answers brief.",
@@ -80,11 +80,11 @@ You should see the agent's response appear — first as a complete block, then t
 
 ```python
 import asyncio
-from agent_framework.azure import AzureOpenAIChatClient
+from agent_framework.openai import OpenAIChatCompletionClient
 from azure.identity import AzureCliCredential
 
 async def main():
-    client = AzureOpenAIChatClient(credential=AzureCliCredential())
+    client = OpenAIChatCompletionClient(credential=AzureCliCredential())
     agent = client.as_agent(
         name="HelloAgent",
         instructions="You are a friendly assistant. Keep your answers brief.",
