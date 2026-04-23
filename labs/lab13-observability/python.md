@@ -18,7 +18,7 @@ python -m venv .venv
 ## Step 2: Install Packages
 
 ```bash
-pip install agent-framework --pre azure-identity opentelemetry-sdk opentelemetry-exporter-console
+pip install agent-framework azure-identity opentelemetry-sdk opentelemetry-exporter-console
 ```
 
 ## Step 3: Set Environment Variables

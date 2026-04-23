@@ -42,9 +42,9 @@ az account show           # Confirm correct subscription
 # Quick test — create and run a test project
 dotnet new console -n TestSetup
 cd TestSetup
-dotnet add package Azure.AI.OpenAI --prerelease
+dotnet add package Azure.AI.OpenAI
 dotnet add package Azure.Identity
-dotnet add package Microsoft.Agents.AI.OpenAI --prerelease
+dotnet add package Microsoft.Agents.AI.OpenAI
 dotnet run                # Should build without errors
 ```
 
@@ -59,7 +59,7 @@ az --version
 az login
 
 # Install MAF
-pip install agent-framework --pre
+pip install agent-framework
 pip install azure-identity
 ```
 

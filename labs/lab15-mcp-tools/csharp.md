@@ -12,11 +12,11 @@ cd Lab15_McpTools
 ## Step 2: Add NuGet Packages
 
 ```bash
-dotnet add package Azure.AI.OpenAI --prerelease
+dotnet add package Azure.AI.OpenAI
 dotnet add package Azure.Identity
-dotnet add package Microsoft.Agents.AI.OpenAI --prerelease
-dotnet add package Microsoft.Extensions.AI --prerelease
-dotnet add package ModelContextProtocol --prerelease
+dotnet add package Microsoft.Agents.AI.OpenAI
+dotnet add package Microsoft.Extensions.AI
+dotnet add package ModelContextProtocol
 ```
 
 ## Step 3: Set Environment Variables

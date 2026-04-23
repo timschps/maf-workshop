@@ -7,9 +7,9 @@
 ```bash
 dotnet new console -n Lab6_MultiTurn
 cd Lab6_MultiTurn
-dotnet add package Azure.AI.OpenAI --prerelease
+dotnet add package Azure.AI.OpenAI
 dotnet add package Azure.Identity
-dotnet add package Microsoft.Agents.AI.OpenAI --prerelease
+dotnet add package Microsoft.Agents.AI.OpenAI
 ```
 
 ## Step 2: Set Environment Variables

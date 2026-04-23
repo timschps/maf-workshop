@@ -12,9 +12,9 @@ cd Lab1_HelloAgent
 ## Step 2: Add NuGet Packages
 
 ```bash
-dotnet add package Azure.AI.OpenAI --prerelease
+dotnet add package Azure.AI.OpenAI
 dotnet add package Azure.Identity
-dotnet add package Microsoft.Agents.AI.OpenAI --prerelease
+dotnet add package Microsoft.Agents.AI.OpenAI
 ```
 
 ## Step 3: Set Environment Variables

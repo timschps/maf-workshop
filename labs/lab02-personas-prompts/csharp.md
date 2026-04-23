@@ -7,9 +7,9 @@
 ```bash
 dotnet new console -n Lab2_Personas
 cd Lab2_Personas
-dotnet add package Azure.AI.OpenAI --prerelease
+dotnet add package Azure.AI.OpenAI
 dotnet add package Azure.Identity
-dotnet add package Microsoft.Agents.AI.OpenAI --prerelease
+dotnet add package Microsoft.Agents.AI.OpenAI
 ```
 
 ## Step 2: Set Environment Variables

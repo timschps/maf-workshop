@@ -10,9 +10,9 @@ This guide provides scaffolding and integration patterns for adding agentic expe
 
 ```bash
 cd YourPartnerApp
-dotnet add package Azure.AI.OpenAI --prerelease
+dotnet add package Azure.AI.OpenAI
 dotnet add package Azure.Identity
-dotnet add package Microsoft.Agents.AI.OpenAI --prerelease
+dotnet add package Microsoft.Agents.AI.OpenAI
 ```
 
 ### 2. Create a Shared Agent Factory

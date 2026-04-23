@@ -7,10 +7,10 @@
 ```bash
 dotnet new web -n Lab14_HostedAgent
 cd Lab14_HostedAgent
-dotnet add package Azure.AI.OpenAI --prerelease
+dotnet add package Azure.AI.OpenAI
 dotnet add package Azure.Identity
-dotnet add package Microsoft.Agents.AI.OpenAI --prerelease
-dotnet add package Microsoft.Agents.AI.Hosting.A2A.AspNetCore --prerelease
+dotnet add package Microsoft.Agents.AI.OpenAI
+dotnet add package Microsoft.Agents.AI.Hosting.A2A.AspNetCore
 ```
 
 ## Step 2: Set Environment Variables
@@ -187,10 +187,10 @@ Create a separate console app:
 ```bash
 dotnet new console -n Lab14_A2AClient
 cd Lab14_A2AClient
-dotnet add package Azure.AI.OpenAI --prerelease
+dotnet add package Azure.AI.OpenAI
 dotnet add package Azure.Identity
-dotnet add package Microsoft.Agents.AI.OpenAI --prerelease
-dotnet add package Microsoft.Agents.AI.A2A --prerelease
+dotnet add package Microsoft.Agents.AI.OpenAI
+dotnet add package Microsoft.Agents.AI.A2A
 ```
 
 Replace `Program.cs`:

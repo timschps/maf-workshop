@@ -20,7 +20,7 @@ python -m venv .venv
 ### Step 2: Install Packages
 
 ```bash
-pip install agent-framework --pre azure-identity
+pip install agent-framework azure-identity
 ```
 
 ### Step 3: Set Environment Variables

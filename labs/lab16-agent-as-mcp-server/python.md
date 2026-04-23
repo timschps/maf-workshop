@@ -18,7 +18,7 @@ python -m venv .venv
 ## Step 2: Install Packages
 
 ```bash
-pip install agent-framework --pre azure-identity mcp
+pip install agent-framework azure-identity mcp
 ```
 
 ## Step 3: Set Environment Variables

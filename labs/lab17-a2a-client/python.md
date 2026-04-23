@@ -20,7 +20,8 @@ python -m venv .venv
 ### Step 2: Install Server Packages
 
 ```bash
-pip install agent-framework --pre agent-framework-a2a --pre azure-identity uvicorn
+pip install agent-framework azure-identity uvicorn
+pip install agent-framework-a2a --pre
 ```
 
 ### Step 3: Set Environment Variables
@@ -157,7 +158,8 @@ python -m venv .venv
 ### Step 7: Install Client Packages
 
 ```bash
-pip install agent-framework --pre agent-framework-a2a --pre
+pip install agent-framework
+pip install agent-framework-a2a --pre
 ```
 
 ### Step 8: Write the Client Code

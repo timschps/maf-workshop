@@ -7,10 +7,10 @@
 ```bash
 dotnet new console -n Lab12_AgentWorkflows
 cd Lab12_AgentWorkflows
-dotnet add package Azure.AI.OpenAI --prerelease
+dotnet add package Azure.AI.OpenAI
 dotnet add package Azure.Identity
-dotnet add package Microsoft.Agents.AI.OpenAI --prerelease
-dotnet add package Microsoft.Agents.AI.Workflows --prerelease
+dotnet add package Microsoft.Agents.AI.OpenAI
+dotnet add package Microsoft.Agents.AI.Workflows
 ```
 
 ## Step 2: Set Environment Variables

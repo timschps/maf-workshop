@@ -18,7 +18,8 @@ python -m venv .venv
 ## Step 2: Install Packages
 
 ```bash
-pip install agent-framework --pre agent-framework-a2a --pre azure-identity uvicorn
+pip install agent-framework azure-identity uvicorn
+pip install agent-framework-a2a --pre
 ```
 
 ## Step 3: Set Environment Variables
@@ -185,7 +186,8 @@ asyncio.run(main())
 ```
 
 ```bash
-pip install agent-framework --pre agent-framework-a2a --pre
+pip install agent-framework
+pip install agent-framework-a2a --pre
 python client.py
 ```
 

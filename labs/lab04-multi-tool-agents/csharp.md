@@ -7,9 +7,9 @@
 ```bash
 dotnet new console -n Lab4_MultiTool
 cd Lab4_MultiTool
-dotnet add package Azure.AI.OpenAI --prerelease
+dotnet add package Azure.AI.OpenAI
 dotnet add package Azure.Identity
-dotnet add package Microsoft.Agents.AI.OpenAI --prerelease
+dotnet add package Microsoft.Agents.AI.OpenAI
 ```
 
 ## Step 2: Set Environment Variables

@@ -10,7 +10,7 @@ This guide provides scaffolding and integration patterns for adding agentic expe
 
 ```bash
 cd your_partner_app
-pip install agent-framework --pre
+pip install agent-framework
 pip install openai
 pip install azure-identity
 ```

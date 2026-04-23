@@ -257,7 +257,7 @@ Module 4: Workflows & Hosting              Module 5: Advanced Patterns
 | `401 Unauthorized` | Run `az login` to refresh your Azure CLI credentials |
 | `model not found` | Verify your deployment name matches your Azure OpenAI resource |
 | `Connection refused` on A2A labs | Make sure the server is running in a separate terminal |
-| Python `ModuleNotFoundError` | Run `pip install agent-framework --pre` (note the `--pre` flag) |
+| Python `ModuleNotFoundError` | Run `pip install agent-framework` |
 | .NET build errors | Run `dotnet restore` first; ensure .NET 9+ is installed |
 
 ### Getting Help

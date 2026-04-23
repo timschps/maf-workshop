@@ -7,12 +7,12 @@
 ```bash
 dotnet new console -n Lab13_Observability
 cd Lab13_Observability
-dotnet add package Azure.AI.OpenAI --prerelease
+dotnet add package Azure.AI.OpenAI
 dotnet add package Azure.Identity
-dotnet add package Microsoft.Agents.AI.OpenAI --prerelease
+dotnet add package Microsoft.Agents.AI.OpenAI
 dotnet add package OpenTelemetry
 dotnet add package OpenTelemetry.Exporter.Console
-dotnet add package Microsoft.Extensions.AI.OpenTelemetry --prerelease
+dotnet add package Microsoft.Extensions.AI.OpenTelemetry
 ```
 
 ## Step 2: Set Environment Variables

@@ -14,12 +14,12 @@ cd Lab17_A2AServer
 ### Step 2: Add Server Packages
 
 ```bash
-dotnet add package Azure.AI.OpenAI --prerelease
+dotnet add package Azure.AI.OpenAI
 dotnet add package Azure.Identity
-dotnet add package Microsoft.Agents.AI.OpenAI --prerelease
-dotnet add package Microsoft.Extensions.AI --prerelease
-dotnet add package Microsoft.Extensions.AI.OpenAI --prerelease
-dotnet add package Microsoft.Agents.AI.Hosting.A2A.AspNetCore --prerelease
+dotnet add package Microsoft.Agents.AI.OpenAI
+dotnet add package Microsoft.Extensions.AI
+dotnet add package Microsoft.Extensions.AI.OpenAI
+dotnet add package Microsoft.Agents.AI.Hosting.A2A.AspNetCore
 ```
 
 ### Step 3: Set Environment Variables
@@ -117,7 +117,7 @@ cd Lab17_A2AClient
 ### Step 8: Add Client Packages
 
 ```bash
-dotnet add package Microsoft.Agents.AI.A2A --prerelease
+dotnet add package Microsoft.Agents.AI.A2A
 ```
 
 ### Step 9: Replace Program.cs (Client)
